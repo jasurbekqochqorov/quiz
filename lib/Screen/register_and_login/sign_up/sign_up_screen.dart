@@ -1,8 +1,9 @@
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
+import 'package:quiz/Screen/register_and_login/sign_in/sign_in_screen.dart';
 import 'package:quiz/Screen/register_and_login/sign_up/widget/check.dart';
 import 'package:quiz/blocs/auth/auth_bloc.dart';
 import 'package:quiz/blocs/auth/auth_event.dart';
 import 'package:quiz/blocs/auth/auth_state.dart';
+import 'package:quiz/data/local/local.dart';
 import 'package:quiz/data/model/user_model/user_model.dart';
 import 'package:quiz/utils/colors/app_colors.dart';
 import 'package:quiz/utils/constants/app_constants.dart';
@@ -14,10 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import '../verify_code/verify_code_screen.dart';
 import '../widget/my_text_from.dart';
-import '../widget/my_text_from_tel.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -27,16 +25,12 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  TextEditingController controllerFirstName = TextEditingController();
-  TextEditingController controllerLastName = TextEditingController();
-  TextEditingController controllerBirthDate = TextEditingController();
-  TextEditingController controllerPhoneNumber = TextEditingController();
-  TextEditingController controllerPassword = TextEditingController();
-  TextEditingController controllerConfirm = TextEditingController();
+  TextEditingController controllerUsername = TextEditingController();
+  TextEditingController controllerEmail = TextEditingController();
+  TextEditingController controllerPassword1 = TextEditingController();
+  TextEditingController controllerPassword2 = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
-
-  String gender = 'male';
 
   bool obthorText = true;
   bool obthorText2 = true;
@@ -45,15 +39,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool minimumEightcharacters = false;
   bool atleastNumber = false;
   bool atleastLowercaseOrUppercaseLetters = false;
-
   DateTime? selectedDate;
 
   @override
   Widget build(BuildContext context) {
-    const List<String> list = [
-      "male",
-      "female",
-    ];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.cFFFFFF,
@@ -79,7 +68,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 children: [
                   16.getH(),
                   Text(
-                    "Sign Up",
+                    "Ro'yxatdan o'tish",
                     style: AppTextStyle.urbanistBold.copyWith(
                       color: AppColors.c1D1E25,
                       fontSize: 24.sp,
@@ -95,8 +84,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   8.getH(),
                   MyTextFromField(
-                    controller: controllerFirstName,
-                    labelText: 'Type your firstname',
+                    controller: controllerUsername,
+                    labelText: 'Ismingizni yozing',
                     perefixIcon: AppImages.person,
                     valueChanged: (String value) {
                       setState(() {});
@@ -106,108 +95,63 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   10.getH(),
                   MyTextFromField(
-                    controller: controllerLastName,
-                    labelText: 'Type your lastname',
+                    controller: controllerEmail,
+                    labelText: 'Emailingizni yozing',
                     perefixIcon: AppImages.person,
                     valueChanged: (String value) {
                       setState(() {});
                     },
-                    regExp: AppConstants.textRegExp,
-                    errorText: 'Lastname error',
+                    regExp: AppConstants.emailRegExp,
+                    errorText: 'Email error',
                   ),
                   20.getH(),
-                  InkWell(
-                    onTap: () {
-                      _selectDate(context);
-                      setState(() {});
-                    },
-                    child: InputDecorator(
-                      decoration: InputDecoration(
-                        labelText: 'Date of Birth',
-                        prefixIcon: SvgPicture.asset(
-                          AppImages.calendar,
-                          width: 7.w,
-                          height: 7.h,
-                        ),
-                        // border: OutlineInputBorder(),
-                      ),
-                      child: selectedDate != null
-                          ? Text(
-                              selectedDate.toString().substring(0, 10),
-                              style: AppTextStyle.urbanistBold
-                                  .copyWith(color: AppColors.c7E8CA0),
-                            )
-                          : const Text('Select Date'),
-                    ),
-                  ),
-                  10.getH(),
-                  CustomDropdown<String>(
-                    hintText: 'Select your gender',
-                    items: list,
-                    initialItem: list.first,
-                    onChanged: (value) {
-                      setState(() {});
-                      gender = value!;
-                    },
-                  ),
-                  5.getH(),
-                  MyTextFromFieldTel(
-                    controller: controllerPhoneNumber,
-                    labelText: 'Type your phone number',
-                    perefixIcon: AppImages.call,
-                    valueChanged: (String value) {
-                      setState(() {});
-                    },
-                    errorText: 'Phone number error',
-                    regExp: AppConstants.phoneRegExp,
-                  ),
                   MyTextFromField(
-                    controller: controllerPassword,
+                    controller: controllerPassword1,
                     textInputAction: TextInputAction.done,
                     onTab: () {
                       setState(() {
                         obthorText = !obthorText;
                       });
                     },
-                    labelText: 'Type your password',
+                    labelText: 'Parol kiriting',
                     perefixIcon: AppImages.lock,
                     obzorText: obthorText,
                     suffixIcon:
                         obthorText ? AppImages.openEye : AppImages.closeEye,
                     valueChanged: _onChange,
                     regExp: AppConstants.passwordRegExp,
-                    errorText: 'Password error',
+                    errorText: 'Parol yaroqli emas',
                   ),
                   10.getH(),
                   MyTextFromField(
-                    controller: controllerConfirm,
+                    controller: controllerPassword2,
                     textInputAction: TextInputAction.done,
                     onTab: () {
                       setState(() {
                         obthorText2 = !obthorText2;
                       });
                     },
-                    labelText: 'Confirm your password',
+                    labelText: 'Parolingizni tasdiqlang',
                     perefixIcon: AppImages.lock,
                     obzorText: obthorText2,
                     suffixIcon:
                         obthorText2 ? AppImages.openEye : AppImages.closeEye,
                     valueChanged: _onChange,
                     regExp: AppConstants.passwordRegExp,
-                    errorText: 'Confirm password error',
+                    errorText: 'Parollar mos emas',
                   ),
                   16.getH(),
                   if (write)
                     CheckInput(
                         check: minimumEightcharacters,
-                        title: "Minimum 8 characters"),
+                        title: "Minimum 8 ta belgi bo'lsin"),
                   if (write)
                     CheckInput(
-                        check: atleastNumber, title: "Atleast 1 number (1-9)"),
+                        check: atleastNumber, title: "Raqamlar ham bo'lsin"),
                   if (write)
                     CheckInput(
                         check: atleastLowercaseOrUppercaseLetters,
-                        title: "Atleast lowercase or uppercase letters"),
+                        title: "Katta yoki kichik harflar ham qatnashsin"),
                   16.getH(),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -229,28 +173,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Expanded(
                         child: RichText(
                           text: TextSpan(
-                            text: "I agree to the company ",
+                            text: "Men sizning kompaniyangizning",
                             style: AppTextStyle.urbanistRegular.copyWith(
                               color: const Color(0xFF9CA3AF),
                               fontSize: 14.sp,
                             ),
                             children: [
                               TextSpan(
-                                text: "Term of Service",
+                                text: " Hamma shartlariga",
                                 style: AppTextStyle.urbanistRegular.copyWith(
                                   color: AppColors.c191A26,
                                   fontSize: 14.sp,
                                 ),
                               ),
                               TextSpan(
-                                text: " and",
+                                text: " va",
                                 style: AppTextStyle.urbanistRegular.copyWith(
                                   color: const Color(0xFF9CA3AF),
                                   fontSize: 14.sp,
                                 ),
                               ),
                               TextSpan(
-                                text: " Privacy Policy",
+                                text: " Qonun qoidalariga roziman",
                                 style: AppTextStyle.urbanistRegular.copyWith(
                                   color: AppColors.c191A26,
                                   fontSize: 14.sp,
@@ -272,28 +216,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           backgroundColor: AppColors.c257CFF,
                           padding: EdgeInsets.symmetric(vertical: 15.he())),
                       onPressed: () {
+                        StorageRepository.setString(key: "name", value:controllerUsername.text);
                         UserModel userMoidel = UserModel(
-                          birthDate: selectedDate.toString().substring(0, 10),
-                          firstName: controllerFirstName.text,
-                          gender: gender,
-                          lastName: controllerLastName.text,
-                          password: controllerPassword.text,
-                          phoneNumber: "+998${controllerPhoneNumber.text}",
+                          accessToken: "",
+                          username: controllerUsername.text,
+                          email: controllerEmail.text,
+                          password1: controllerPassword1.text,
+                          password2: controllerPassword2.text,
                         );
 
-                        if (controllerPhoneNumber.text.isNotEmpty &&
-                            controllerLastName.text.isNotEmpty &&
-                            controllerFirstName.text.isNotEmpty &&
-                            controllerPassword.text.length > 7) {
+                        if (controllerUsername.text.isNotEmpty &&
+                            controllerEmail.text.isNotEmpty &&
+                            controllerPassword2.text.length>7 &&
+                            controllerPassword1.text.length > 7) {
                           debugPrint("Qonday");
 
-                          if (controllerPassword.text !=
-                              controllerConfirm.text) {
+                          if (controllerPassword1.text !=
+                              controllerPassword2.text) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 backgroundColor: Colors.red,
                                 content: Text(
-                                  "Password and Confirm password are not the same",
+                                  "Parollar mos emas",
                                   style: TextStyle(
                                     color: AppColors.white,
                                     fontSize: 20.sp,
@@ -312,7 +256,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             SnackBar(
                               backgroundColor: Colors.red,
                               content: Text(
-                                "Info error!",
+                                "Malumotlar hammsini to'ldiring!",
                                 style: TextStyle(
                                   color: AppColors.white,
                                   fontSize: 20.sp,
@@ -324,7 +268,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         }
                       },
                       child: Text(
-                        "Sign Up",
+                        "Ro'yxatdan o'tish",
                         style: AppTextStyle.urbanistBold.copyWith(
                           fontSize: 14.sp,
                           color: AppColors.cFFFFFF,
@@ -338,7 +282,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
             );
           },
           listener: (BuildContext context, AuthState state) {
-            if (state.statusMessage == "this_number_already_registered") {}
+            if (state.statusMessage == "this_email_already_registered") {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    backgroundColor: Colors.red,
+                    content: Center(child: Text("Bu email allaqchon ro'yxatdan o'tgan",style: AppTextStyle.urbanistBold.copyWith(color: AppColors.white),)),)
+              );}
 
             if (state.statusMessage == "registered") {
               debugPrint("registered------------");
@@ -346,16 +295,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => VerifyCodeScreen(
-                    userModel: UserModel(
-                      birthDate: selectedDate.toString().substring(0, 10),
-                      firstName: controllerFirstName.text,
-                      gender: "male",
-                      lastName: controllerLastName.text,
-                      password: controllerPassword.text,
-                      phoneNumber: "+998${controllerPhoneNumber.text}",
-                    ),
-                  ),
+                  builder: (context) => SignInScreen(),
                 ),
               );
             }

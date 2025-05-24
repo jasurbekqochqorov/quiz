@@ -1,24 +1,24 @@
 class LoginModel {
   final String fcmToken;
   final String password;
-  final String phoneNumber;
+  final String email;
   final String platformName;
   final String platformType;
 
   LoginModel({
     required this.fcmToken,
     required this.password,
-    required this.phoneNumber,
+    required this.email,
     required this.platformName,
     required this.platformType,
   });
 
   Map<String, dynamic> toJson() {
     return {
-      'fcm_token': fcmToken,
+      'access_token': fcmToken,
       'password': password,
-      'phone_number': phoneNumber,
-      'platform_name': platformName,
+      'email': email,
+      'username': platformName,
       'platform_type': platformType,
     };
   }
@@ -26,14 +26,14 @@ class LoginModel {
   LoginModel copyWith({
     String? fcmToken,
     String? password,
-    String? phoneNumber,
+    String? email,
     String? platformName,
     String? platformType,
   }) {
     return LoginModel(
       fcmToken: fcmToken ?? this.fcmToken,
       password: password ?? this.password,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
+      email: email ?? this.email,
       platformName: platformName ?? this.platformName,
       platformType: platformType ?? this.platformType,
     );
