@@ -58,18 +58,31 @@ class MyTextFromField extends StatelessWidget {
       controller: controller,
       obscureText: obzorText,
       decoration: InputDecoration(
-        focusedBorder: UnderlineInputBorder(
+        focusedBorder:OutlineInputBorder(
+         borderSide: BorderSide(
+           width: 1.sp,
+           color: AppColors.c257CFF
+         ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.red,
+            width: 1.sp
+          )
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.red,
+            width: 1.sp
+          )
+        ),
+        enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: AppColors.c257CFF,
             width: 1.we(),
           ),
         ),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: AppColors.c257CFF,
-            width: 1.we(),
-          ),
-        ),
+
         label: Text(
           labelText,
           style: AppTextStyle.urbanistRegular.copyWith(

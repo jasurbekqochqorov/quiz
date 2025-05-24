@@ -1,6 +1,7 @@
 import 'package:quiz/blocs/auth/auth_bloc.dart';
 import 'package:quiz/blocs/auth/auth_event.dart';
 import 'package:quiz/blocs/auth/auth_state.dart';
+import 'package:quiz/data/local/local.dart';
 import 'package:quiz/data/model/login_model/login_model.dart';
 import 'package:quiz/utils/colors/app_colors.dart';
 import 'package:quiz/utils/constants/app_constants.dart';
@@ -11,12 +12,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../home/home_screen.dart';
+import '../../tabbox/tab_box_screen.dart';
 import '../forgot_password/forget_password.dart';
 import '../forgot_password/new_pasword.dart';
 import '../sign_up/sign_up_screen.dart';
 import '../widget/my_text_from.dart';
 import '../widget/my_text_from_tel.dart';
-
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
 
@@ -32,7 +33,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   final formKey = GlobalKey<FormState>();
 
-  TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   @override
@@ -47,7 +48,7 @@ class _SignInScreenState extends State<SignInScreen> {
               children: [
                 96.getH(),
                 Text(
-                  "Welcome Back!",
+                  "Xush kelibsiz!",
                   style: AppTextStyle.urbanistBold.copyWith(
                     color: AppColors.c1D1E25,
                     fontSize: 24.sp,
@@ -55,26 +56,26 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
                 8.getH(),
                 Text(
-                  "Sign In to your account",
+                  "Shaxsiy accountingizga kirish",
                   style: AppTextStyle.urbanistRegular.copyWith(
                     color: AppColors.c68DBFF,
                     fontSize: 16.sp,
                   ),
                 ),
                 70.getH(),
-                MyTextFromFieldTel(
-                  regExp: AppConstants.phoneRegExp,
-                  errorText: 'Phone number error',
-                  controller: phoneNumberController,
-                  labelText: 'Type your phone',
-                  perefixIcon: AppImages.call,
+                MyTextFromField(
+                  regExp: AppConstants.emailRegExp,
+                  errorText: 'Email xato',
+                  controller: emailController,
+                  labelText: 'Emailingizni kiriting',
+                  perefixIcon: AppImages.person,
                   valueChanged: (String value) {
                     setState(() {});
                   },
                 ),
                 30.getH(),
                 MyTextFromField(
-                  errorText: 'Password error',
+                  errorText: 'Parol xato',
                   regExp: AppConstants.passwordRegExp,
                   controller: passwordController,
                   textInputAction: TextInputAction.done,
@@ -83,7 +84,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       obthorText = !obthorText;
                     });
                   },
-                  labelText: 'Type your password',
+                  labelText: 'Parolingizni kiriting',
                   perefixIcon: AppImages.lock,
                   obzorText: obthorText,
                   suffixIcon:
@@ -94,29 +95,29 @@ class _SignInScreenState extends State<SignInScreen> {
                     setState(() {});
                   },
                 ),
-                16.getH(),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return ForgetPassword();
-                          },
-                        ),
-                      );
-                    },
-                    child: Text(
-                      "Forgot Password?",
-                      style: AppTextStyle.urbanistBold.copyWith(
-                        fontSize: 14.sp,
-                        color: AppColors.c257CFF,
-                      ),
-                    ),
-                  ),
-                ),
+                // 16.getH(),
+                // Align(
+                //   alignment: Alignment.centerRight,
+                //   child: TextButton(
+                //     onPressed: () {
+                //       Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //           builder: (context) {
+                //             return ForgetPassword();
+                //           },
+                //         ),
+                //       );
+                //     },
+                //     child: Text(
+                //       "Forgot Password?",
+                //       style: AppTextStyle.urbanistBold.copyWith(
+                //         fontSize: 14.sp,
+                //         color: AppColors.c257CFF,
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 73.getH(),
                 SizedBox(
                   width: double.infinity,
@@ -129,15 +130,13 @@ class _SignInScreenState extends State<SignInScreen> {
                     onPressed: () {
                       _loading = true;
                       setState(() {});
-
                       LoginModel loginModel = LoginModel(
-                        fcmToken: "asdfasdfsaf",
+                        fcmToken: "",
                         password: passwordController.text,
-                        phoneNumber: "+998${phoneNumberController.text}",
+                        email: emailController.text,
                         platformName: "mobile",
                         platformType: "mobile",
                       );
-
                       context.read<AuthBloc>().add(
                             LoginUserEvent(
                               loginModel: loginModel,
@@ -149,9 +148,9 @@ class _SignInScreenState extends State<SignInScreen> {
                             child: CircularProgressIndicator.adaptive(),
                           )
                         : Text(
-                            "Sign In",
+                            "Kirish",
                             style: AppTextStyle.urbanistBold.copyWith(
-                              fontSize: 14.sp,
+                              fontSize: 18.sp,
                               color: AppColors.cFFFFFF,
                             ),
                           ),
@@ -162,7 +161,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Don’t have account?",
+                      "Account mavjud emasmi?",
                       style: AppTextStyle.urbanistRegular.copyWith(
                         fontSize: 14.sp,
                         color: const Color(0xFF9CA3AF),
@@ -185,7 +184,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         );
                       },
                       child: Text(
-                        "Sign Up ",
+                        "Ro'yxatdan o'tish",
                         style: AppTextStyle.urbanistBold.copyWith(
                           fontSize: 14.sp,
                           color: AppColors.c257CFF,
@@ -210,7 +209,6 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
             );
           }
-
           if (state.formStatus == FormStatus.error) {
             showDialog(
               context: context,
@@ -233,16 +231,13 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
             );
           }
-
           if (state.statusMessage=="logged") {
-
-            debugPrint("${state.statusMessage=='logged'}  ");
+            debugPrint("ASDFASFSF${state.userModel.accessToken}");
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) {
-                  return HomeScreen();
-
+                  return TabScreen();
                 },
               ),
             );
@@ -252,10 +247,6 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  bool get _validation {
-    return passwordController.text.length > 7 &&
-        phoneNumberController.text.length == 13;
-  }
 }
 
 late AnimationController globalAnimationController;

@@ -22,21 +22,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<RegisterUserEvent>(_registerUser);
     on<CheckAuthenticationEvent>(_checkAuthenticationUser);
     on<LogOutUserEvent>(_logOutUser);
-    on<AuthRequestPassword>(_check);
-    on<AuthForgetPasswordEvent>(_forgetPassword);
-    on<AuthVerifyOtpCoderEvent>(_verifyOtpCode);
+    // on<AuthRequestPassword>(_check);
+    // on<AuthForgetPasswordEvent>(_forgetPassword);
+    // on<AuthVerifyOtpCoderEvent>(_verifyOtpCode);
     on<AuthUpdatePasswordEvent>(_updatePassword);
   }
 
   final AuthRepository _appRepository;
-
   Future<void> _loginUser(LoginUserEvent event, emit) async {
     NetworkResponse networkResponse =
         await _appRepository.loginUser(loginModel: event.loginModel);
-
     if (networkResponse.errorText.isEmpty) {
-
-
       emit(
         state.copyWith(
           statusMessage: "logged",
@@ -53,26 +49,26 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> _check(AuthRequestPassword even, emit) async {
-    NetworkResponse networkResponse =
-        await _appRepository.registerUserVerify(verifyModel: even.verifyModel);
-
-    if (networkResponse.errorText.isEmpty) {
-      emit(
-        state.copyWith(
-          statusMessage: "query_ok",
-        ),
-      );
-    } else {
-      debugPrint("Error :(");
-
-      if (networkResponse.errorText == "this_number_already_registered") {
-        emit(state.copyWith(statusMessage: "this_number_already_registered"));
-      } else {
-        emit(state.copyWith(errorText: "Register else error"));
-      }
-    }
-  }
+  // Future<void> _check(AuthRequestPassword even, emit) async {
+  //   NetworkResponse networkResponse =
+  //       await _appRepository.registerUserVerify(verifyModel: even.verifyModel);
+  //
+  //   if (networkResponse.errorText.isEmpty) {
+  //     emit(
+  //       state.copyWith(
+  //         statusMessage: "query_ok",
+  //       ),
+  //     );
+  //   } else {
+  //     debugPrint("Error :(");
+  //
+  //     if (networkResponse.errorText == "this_number_already_registered") {
+  //       emit(state.copyWith(statusMessage: "this_number_already_registered"));
+  //     } else {
+  //       emit(state.copyWith(errorText: "Register else error"));
+  //     }
+  //   }
+  // }
 
   Future<void> _registerUser(RegisterUserEvent event, emit) async {
 
@@ -84,14 +80,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         state.copyWith(
           formStatus: FormStatus.authenticated,
           statusMessage: "registered",
+          userModel: event.userModel
         ),
       );
     debugPrint("Qonday");
     } else {
       debugPrint("Error MAkkamik :( ${networkResponse.errorText}");
 
-      if (networkResponse.errorText == "this_number_already_registered") {
-        emit(state.copyWith(statusMessage: "this_number_already_registered"));
+      if (networkResponse.errorText == "this_email_already_registered") {
+        emit(state.copyWith(statusMessage: "this_email_already_registered"));
       } else {
         emit(state.copyWith(errorText: "Register else error"));
       }
@@ -107,43 +104,43 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     networkResponse = await _appRepository.logoutUser(token: "");
   }
 
-  Future<void> _verifyOtpCode(AuthVerifyOtpCoderEvent event, emit) async {
-    NetworkResponse networkResponse = NetworkResponse();
-    emit(state.copyWith(formStatus: FormStatus.loading));
-
-    networkResponse = await _appRepository.verifyOtpCodeUser(
-      phoneNumber: event.phoneNumber,
-      password: event.password,
-    );
-    if (networkResponse.errorText.isEmpty) {
-      debugPrint("ALLLLLLLLLLLL"+networkResponse.data["token"].toString());
-      emit(
-        state.copyWith(
-            userToken: networkResponse.data["token"],
-            statusMessage: "token",
-            formStatus: FormStatus.pure),
-      );
-    } else {
-      emit(state.copyWith(
-          errorText: networkResponse.errorText, formStatus: FormStatus.error));
-    }
-  }
-
-  Future<void> _forgetPassword(AuthForgetPasswordEvent event, emit) async {
-    NetworkResponse networkResponse = NetworkResponse();
-    emit(state.copyWith(formStatus: FormStatus.loading));
-
-    networkResponse =
-        await _appRepository.forgetPassword(phoneNumber: event.phoneNumber);
-    if (networkResponse.errorText.isEmpty) {
-      emit(state.copyWith(
-          statusMessage: "forget_password", formStatus: FormStatus.pure));
-    } else {
-      emit(state.copyWith(
-          statusMessage: networkResponse.errorText,
-          formStatus: FormStatus.error));
-    }
-  }
+  // Future<void> _verifyOtpCode(AuthVerifyOtpCoderEvent event, emit) async {
+  //   NetworkResponse networkResponse = NetworkResponse();
+  //   emit(state.copyWith(formStatus: FormStatus.loading));
+  //
+  //   networkResponse = await _appRepository.verifyOtpCodeUser(
+  //     phoneNumber: event.phoneNumber,
+  //     password: event.password,
+  //   );
+  //   if (networkResponse.errorText.isEmpty) {
+  //     debugPrint("ALLLLLLLLLLLL"+networkResponse.data["token"].toString());
+  //     emit(
+  //       state.copyWith(
+  //           userToken: networkResponse.data["token"],
+  //           statusMessage: "token",
+  //           formStatus: FormStatus.pure),
+  //     );
+  //   } else {
+  //     emit(state.copyWith(
+  //         errorText: networkResponse.errorText, formStatus: FormStatus.error));
+  //   }
+  // }
+  //
+  // Future<void> _forgetPassword(AuthForgetPasswordEvent event, emit) async {
+  //   NetworkResponse networkResponse = NetworkResponse();
+  //   emit(state.copyWith(formStatus: FormStatus.loading));
+  //
+  //   networkResponse =
+  //       await _appRepository.forgetPassword(phoneNumber: event.phoneNumber);
+  //   if (networkResponse.errorText.isEmpty) {
+  //     emit(state.copyWith(
+  //         statusMessage: "forget_password", formStatus: FormStatus.pure));
+  //   } else {
+  //     emit(state.copyWith(
+  //         statusMessage: networkResponse.errorText,
+  //         formStatus: FormStatus.error));
+  //   }
+  // }
 
   Future<void> _updatePassword(AuthUpdatePasswordEvent event, emit) async {
     NetworkResponse networkResponse = NetworkResponse();
