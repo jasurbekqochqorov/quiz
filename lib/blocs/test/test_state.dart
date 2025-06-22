@@ -1,4 +1,7 @@
-import 'package:quiz/data/model/subject/subject_model.dart';
+import 'package:quiz/data/model/coin_model/coin_model.dart';
+import 'package:quiz/data/model/questionMain/question_main_model.dart';
+import 'package:quiz/data/model/resultMain/result_main_model.dart';
+import 'package:quiz/data/model/test_model/test_model.dart';
 import '../auth/auth_state.dart';
 
 class TestState {
@@ -6,27 +9,40 @@ class TestState {
     required this.userToken,
     required this.errorText,
     required this.formStatus,
-    required this.subjectModel,
+    required this.testModel,
     required this.statusMessage,
+    required this.questions,
+    required this.coinModel,
+    required this.resultMainModel
   });
 
+
+  final CoinModel coinModel;
+  final QuestionMainModel questions;
   final String errorText;
   final String statusMessage;
-  final SubjectModel subjectModel;
+  final List<TestModel> testModel;
   final FormStatus formStatus;
   final String userToken;
+  final ResultMainModel resultMainModel;
 
   TestState copyWith({
+    CoinModel? coinModel,
     String? errorText,
+    QuestionMainModel? questions,
     FormStatus? formStatus,
-    SubjectModel? subjectModel,
+    List<TestModel>? testModel,
     String? statusMessage,
     String? userToken,
+    ResultMainModel? resultMainModel,
   }) {
     return TestState(
+      resultMainModel:  resultMainModel ?? this.resultMainModel,
+      coinModel: coinModel ?? this.coinModel,
+      questions: questions ?? this.questions,
       errorText: errorText ?? this.errorText,
       statusMessage: statusMessage ?? this.statusMessage,
-      subjectModel: subjectModel?? this.subjectModel,
+      testModel: testModel?? this.testModel,
       formStatus: formStatus ?? this.formStatus,
       userToken: userToken ?? this.userToken,
     );

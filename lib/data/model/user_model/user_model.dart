@@ -1,58 +1,65 @@
 class UserModel {
   UserModel({
     required this.accessToken,
-    required this.email,
-    required this.username,
-    required this.password1,
-    required this.password2,
+    required this.lastName,
+    required this.firstName,
+    required this.phone,
+    required this.password,
+    required this.showPassword,
   });
 
   final String accessToken;
-  final String email;
-  final String username;
-  final String password1;
-  final String password2;
+  final String firstName;
+  final String lastName;
+  final String phone;
+  final String password;
+  final String showPassword;
 
   UserModel copyWith({
-    String? email,
+    String? firstName,
+    String? lastName,
     String? accessToken,
-    String? username,
-    String? password1,
-    String? password2,
+    String? phone,
+    String? password,
+    String? showPassword,
   }) =>
       UserModel(
+        firstName: firstName ?? this.firstName,
+        lastName: lastName ?? this.lastName,
         accessToken: accessToken ?? this.accessToken,
-        email: email ?? this.email,
-        username: username ?? this.username,
-        password1: password1 ?? this.password1,
-        password2: password2 ?? this.password2,
+        phone: phone ?? this.phone,
+        password: password ?? this.password,
+        showPassword: showPassword ?? this.showPassword,
       );
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       accessToken: json["access_token"] as String ?? "",
-      email: json["email"] as String? ?? "",
-      username: json["username"] as String? ?? "",
-      password1: json["password1"] as String? ?? "",
-      password2: json["password2"] as String? ?? "",
+      phone: json["phone"] as String ?? "",
+      firstName: json["first_name"] as String? ?? "",
+      lastName: json["last_name"] as String? ?? "",
+      password: json["password"] as String? ?? "",
+      showPassword: json["show_password"] as String? ?? "",
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       "access_token":accessToken,
-      "email": email,
-      "username": username,
-      "password1": password1,
-      "password2": password2,
+      "first_name": firstName,
+      "phone": phone,
+      "last_name": lastName,
+      "password": password,
+      "show_password": showPassword,
     };
   }
 
   static UserModel initial() => UserModel(
     accessToken: "",
-    username: '',
-    email: '',
-    password1: '',
-    password2: '',
+    firstName: '',
+    lastName: "",
+    phone: '',
+    password: '',
+    showPassword: '',
   );
 }

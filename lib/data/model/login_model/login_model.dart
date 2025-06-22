@@ -1,14 +1,14 @@
 class LoginModel {
   final String fcmToken;
   final String password;
-  final String email;
+  final String phone;
   final String platformName;
   final String platformType;
 
   LoginModel({
     required this.fcmToken,
     required this.password,
-    required this.email,
+    required this.phone,
     required this.platformName,
     required this.platformType,
   });
@@ -17,7 +17,7 @@ class LoginModel {
     return {
       'access_token': fcmToken,
       'password': password,
-      'email': email,
+      'phone': phone,
       'username': platformName,
       'platform_type': platformType,
     };
@@ -26,14 +26,14 @@ class LoginModel {
   LoginModel copyWith({
     String? fcmToken,
     String? password,
-    String? email,
+    String? phone,
     String? platformName,
     String? platformType,
   }) {
     return LoginModel(
       fcmToken: fcmToken ?? this.fcmToken,
       password: password ?? this.password,
-      email: email ?? this.email,
+      phone: phone ?? this.phone,
       platformName: platformName ?? this.platformName,
       platformType: platformType ?? this.platformType,
     );

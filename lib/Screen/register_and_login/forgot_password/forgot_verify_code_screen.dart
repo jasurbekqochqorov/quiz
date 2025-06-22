@@ -1,20 +1,23 @@
 import 'dart:async';
+import 'package:quiz/Screen/register_and_login/createPassword/create_password.dart';
 import 'package:quiz/blocs/auth/auth_event.dart';
 import 'package:quiz/blocs/auth/auth_state.dart';
+import 'package:quiz/data/model/user_model/user_model.dart';
+import 'package:quiz/utils/colors/app_colors.dart';
 import 'package:quiz/utils/size/size_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:quiz/utils/styles/app_text_style.dart';
 import '../../../blocs/auth/auth_bloc.dart';
 import '../sign_in/sign_in_screen.dart';
-import '../verified/verified.dart';
 
 class ForgotVerifyCodeScreen extends StatefulWidget {
-  const ForgotVerifyCodeScreen({Key? key, required this.phoneNumber})
-      : super(key: key);
+  const ForgotVerifyCodeScreen(this.userModel,{super.key, required this.phone});
 
-  final String phoneNumber;
+  final String phone;
+  final UserModel userModel;
 
   @override
   _ForgotVerifyCodeScreenState createState() => _ForgotVerifyCodeScreenState();
@@ -25,7 +28,7 @@ class _ForgotVerifyCodeScreenState extends State<ForgotVerifyCodeScreen>
   late Animation<Alignment> animationAlign;
   String pinCode = "";
   List<String> list = [];
-  int _start = 10;
+  int _start = 180;
   late Timer _timer;
   bool visibleRestart = false;
   bool error = false;
@@ -36,7 +39,7 @@ class _ForgotVerifyCodeScreenState extends State<ForgotVerifyCodeScreen>
 
     globalAnimationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 180),
     );
 
     animationAlign = TweenSequence<Alignment>([
@@ -88,16 +91,16 @@ class _ForgotVerifyCodeScreenState extends State<ForgotVerifyCodeScreen>
         backgroundColor: Colors.white10,
       ),
       onPressed: () {
-        if (pinCode.length < 4) {
+        if (pinCode.length < 5) {
           list = [];
           pinCode += title;
           list = pinCode.split('');
-          if (pinCode.length == 4) {
+          if (pinCode.length == 5) {
             debugPrint(pinCode);
             context.read<AuthBloc>().add(
                   AuthVerifyOtpCoderEvent(
-                    phoneNumber: widget.phoneNumber,
-                    password: int.parse(pinCode),
+                    phoneNumber:widget.phone,
+                    code: int.parse(pinCode),
                   ),
                 );
           }
@@ -137,7 +140,7 @@ class _ForgotVerifyCodeScreenState extends State<ForgotVerifyCodeScreen>
               children: [
                 SizedBox(height: 16.we()),
                 Text(
-                  "Verify Phone",
+                  "Kodni tasdiqlash",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 24.sp,
@@ -146,7 +149,7 @@ class _ForgotVerifyCodeScreenState extends State<ForgotVerifyCodeScreen>
                 ),
                 SizedBox(height: 8.w),
                 Text(
-                  "Please enter the code we just sent to phone number",
+                  "Iltimos Raqamingizga yuborilgan kodni kiriting",
                   style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w400,
@@ -160,12 +163,12 @@ class _ForgotVerifyCodeScreenState extends State<ForgotVerifyCodeScreen>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       ...List.generate(
-                        4,
+                        5,
                         (index) {
                           return Container(
                             margin: EdgeInsets.symmetric(horizontal: 8.w),
-                            width: 56.w,
-                            height: 56.h,
+                            width: 36.w,
+                            height: 36.h,
                             decoration: BoxDecoration(
                               color: (index < pinCode.length)
                                   ? Colors.white
@@ -206,7 +209,8 @@ class _ForgotVerifyCodeScreenState extends State<ForgotVerifyCodeScreen>
                   Center(
                     child: TextButton(
                       onPressed: () {
-                        _start = 60;
+                        context.read<AuthBloc>().add(SendSmsEvent(phone:widget.phone));
+                        _start = 180;
                         visibleRestart = false;
                         startTimer();
                         setState(() {});
@@ -288,7 +292,7 @@ class _ForgotVerifyCodeScreenState extends State<ForgotVerifyCodeScreen>
                           setState(() {
                             pinCode = pinCode.substring(0, pinCode.length - 1);
                             list = pinCode.split('');
-                            if (list.length < 4) {
+                            if (list.length < 5) {
                               error = false;
                             }
                           });
@@ -298,28 +302,21 @@ class _ForgotVerifyCodeScreenState extends State<ForgotVerifyCodeScreen>
                     ),
                   ],
                 ),
-                BlocListener<AuthBloc, AuthState>(
-                  listener: (BuildContext context, AuthState state) {
-                    debugPrint("KELDI ");
-                    if (state.statusMessage == "query_ok") {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return VerifiedScreen();
-                          },
-                        ),
-                      );
-                    }
-                  },
-                  child: const SizedBox(),
-                ),
               ],
             ),
           );
         },
         listener: (BuildContext context, AuthState state) {
-
+          if(state.statusMessage=="code tasdiqlandi"){
+            Navigator.pushReplacement(context,MaterialPageRoute(builder: (context){
+              return CreatePasswordScreen(userModel:widget.userModel);
+            }));
+          }
+          else if(state.formStatus==FormStatus.success){
+            error=true;
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(state.errorText,style: AppTextStyle.urbanistSemiBold.copyWith(color: AppColors.white),),backgroundColor:Colors.red,));
+            setState(() {});
+          }
         },
       ),
     );

@@ -9,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 class MyTextFromField extends StatelessWidget {
   const MyTextFromField({
     super.key,
+    this.focusNode,
     required this.labelText,
     this.obzorText = false,
     required this.perefixIcon,
@@ -21,6 +22,7 @@ class MyTextFromField extends StatelessWidget {
     required this.errorText,
   });
 
+  final FocusNode? focusNode;
   final String labelText;
   final String errorText;
   final RegExp regExp;
@@ -54,6 +56,7 @@ class MyTextFromField extends StatelessWidget {
           return null;
         }
       },
+      focusNode: focusNode,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       controller: controller,
       obscureText: obzorText,

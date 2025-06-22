@@ -1,7 +1,5 @@
-import 'package:quiz/data/model/login_model/login_model.dart';
-import 'package:quiz/data/model/subject/subject_model.dart';
-import 'package:quiz/data/model/test_model/test_model.dart';
 import 'package:equatable/equatable.dart';
+import '../../data/model/test_model/test_model.dart';
 
 class TestEvent extends Equatable {
   @override
@@ -9,12 +7,29 @@ class TestEvent extends Equatable {
 }
 
 class TestAllEvent extends TestEvent {
-  TestAllEvent({required this.token});
+  TestAllEvent({required this.subjectId});
+  final int subjectId;
+  @override
+  List<Object?> get props => [subjectId];
+}
 
+
+class QuestionAllEvent extends TestEvent {
+  QuestionAllEvent({required this.token,required this.id});
   final String token;
+  final int id;
 
   @override
-  List<Object?> get props => [token];
+  List<Object?> get props => [token,id];
+}
+
+class ResultAllEvent extends TestEvent {
+  ResultAllEvent({required this.token,required this.id});
+  final String token;
+  final int id;
+
+  @override
+  List<Object?> get props => [token,id];
 }
 
 

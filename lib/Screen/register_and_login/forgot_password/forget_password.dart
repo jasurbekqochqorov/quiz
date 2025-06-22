@@ -19,14 +19,14 @@ class ForgetPassword extends StatefulWidget {
   @override
   State<ForgetPassword> createState() => _ForgetPasswordState();
 }
-
+FocusNode focusNode=FocusNode();
 TextEditingController controllerPhoneNumber = TextEditingController();
 
 class _ForgetPasswordState extends State<ForgetPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocConsumer<AuthBloc, AuthState>(
+      body: BlocBuilder<AuthBloc, AuthState>(
         builder: (BuildContext context, AuthState state) {
           return SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 20.we()),
@@ -35,7 +35,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
               children: [
                 96.getH(),
                 Text(
-                  "Forgot Password",
+                  "Maxfiy so'zni unutdingizmi?",
                   style: AppTextStyle.urbanistBold.copyWith(
                     color: AppColors.c1D1E25,
                     fontSize: 24.sp,
@@ -43,7 +43,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                 ),
                 SizedBox(height: 8.h,),
                 Text(
-                  "Select verification method and we will send verification code",
+                  "Telefon raqamingizni kiriting",
                   style: AppTextStyle.urbanistRegular.copyWith(
                     color: AppColors.c808D9E,
                     fontSize: 16.sp,
@@ -51,12 +51,16 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                 ),
                 70.getH(),
                 MyTextFromFieldTel(
+                  focusNode: focusNode,
                   regExp: AppConstants.phoneRegExp,
                   errorText: 'Phone number error',
                   controller: controllerPhoneNumber,
                   labelText: 'Type your phone',
                   perefixIcon: AppImages.call,
                   valueChanged: (String value) {
+                    if(value.length==9){
+                      focusNode.unfocus();
+                    }
                     setState(() {});
                   },
                 ),
@@ -69,14 +73,11 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                             borderRadius: BorderRadius.circular(4.r)),
                         backgroundColor: AppColors.c257CFF,
                         padding: EdgeInsets.symmetric(vertical: 15.he())),
-                    onPressed: state.formStatus == FormStatus.loading
-                        ? null
-                        : () {
-                            context.read<AuthBloc>().add(
-                                  AuthForgetPasswordEvent(
-                                      phoneNumber:
-                                          "+998${controllerPhoneNumber.text}"),
-                                );
+                    onPressed:() {
+                      context.read<AuthBloc>().add(SendSmsEvent(phone: "998${controllerPhoneNumber.text}"));
+                            Navigator.pushReplacement(context,MaterialPageRoute(builder: (context){
+                              return ForgotVerifyCodeScreen(state.userModel,phone: "998${controllerPhoneNumber.text}",);
+                            }));
                           },
                     child: state.formStatus == FormStatus.loading
                         ? const Center(
@@ -95,21 +96,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             ),
           );
         },
-        listener: (BuildContext context, AuthState state) {
-          if (state.statusMessage == "forget_password") {
-            debugPrint("CODE");
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return ForgotVerifyCodeScreen(
-                    phoneNumber: "+998${controllerPhoneNumber.text}",
-                  );
-                },
-              ),
-            );
-          }
-        },
+
       ),
     );
   }

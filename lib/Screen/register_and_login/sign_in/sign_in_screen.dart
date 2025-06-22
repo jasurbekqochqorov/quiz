@@ -33,8 +33,9 @@ class _SignInScreenState extends State<SignInScreen> {
 
   final formKey = GlobalKey<FormState>();
 
-  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  FocusNode focusNode=FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -63,13 +64,17 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
                 70.getH(),
-                MyTextFromField(
-                  regExp: AppConstants.emailRegExp,
-                  errorText: 'Email xato',
-                  controller: emailController,
+                MyTextFromFieldTel(
+                  focusNode: focusNode,
+                  regExp: AppConstants.phoneRegExp,
+                  errorText: 'Telefon raqam xato',
+                  controller: phoneController,
                   labelText: 'Emailingizni kiriting',
                   perefixIcon: AppImages.person,
                   valueChanged: (String value) {
+                    if(value.length==9){
+                      focusNode.unfocus();
+                    }
                     setState(() {});
                   },
                 ),
@@ -95,29 +100,29 @@ class _SignInScreenState extends State<SignInScreen> {
                     setState(() {});
                   },
                 ),
-                // 16.getH(),
-                // Align(
-                //   alignment: Alignment.centerRight,
-                //   child: TextButton(
-                //     onPressed: () {
-                //       Navigator.push(
-                //         context,
-                //         MaterialPageRoute(
-                //           builder: (context) {
-                //             return ForgetPassword();
-                //           },
-                //         ),
-                //       );
-                //     },
-                //     child: Text(
-                //       "Forgot Password?",
-                //       style: AppTextStyle.urbanistBold.copyWith(
-                //         fontSize: 14.sp,
-                //         color: AppColors.c257CFF,
-                //       ),
-                //     ),
-                //   ),
-                // ),
+                16.getH(),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return ForgetPassword();
+                          },
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Forgot Password?",
+                      style: AppTextStyle.urbanistBold.copyWith(
+                        fontSize: 14.sp,
+                        color: AppColors.c257CFF,
+                      ),
+                    ),
+                  ),
+                ),
                 73.getH(),
                 SizedBox(
                   width: double.infinity,
@@ -133,7 +138,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       LoginModel loginModel = LoginModel(
                         fcmToken: "",
                         password: passwordController.text,
-                        email: emailController.text,
+                        phone: "998${phoneController.text}",
                         platformName: "mobile",
                         platformType: "mobile",
                       );
@@ -198,45 +203,20 @@ class _SignInScreenState extends State<SignInScreen> {
           );
         },
         listener: (BuildContext context, AuthState state) {
-          if (state.formStatus == FormStatus.success) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return const SignInScreen();
-
-                },
-              ),
-            );
-          }
           if (state.formStatus == FormStatus.error) {
             showDialog(
               context: context,
               builder: (BuildContext context) {
                 _loading=false;
                 return AlertDialog(
-                  title: Text(state.errorText),
+                  title: Text(state.errorText,),
                 );
               },
             );
           }
-          if (state.statusMessage == "token") {
-            print("Tokennnnnnn ${state.userToken}");
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return const NewPassworScreen();
-                },
-              ),
-            );
-          }
-          if (state.statusMessage=="logged") {
-            debugPrint("ASDFASFSF${state.userModel.accessToken}");
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
+          if (state.statusMessage=="logged" && state.formStatus==FormStatus.authenticated) {
+            StorageRepository.setString(key: "key", value:state.userModel.accessToken);
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return TabScreen();
                 },
               ),
@@ -248,5 +228,5 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
 }
-
 late AnimationController globalAnimationController;
+

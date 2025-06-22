@@ -18,7 +18,7 @@ class AppImages {
   static const String creator  = "assets/images/creator.JPG";
   static const String cansel  = "assets/icons/cansel.svg";
   static const String calendar  = "assets/icons/calendar.svg";
-  static const String belll  = "assets/icons/belll.svg";
+  static const String watch  = "assets/icons/watch.svg";
 
   //.svg
 

@@ -23,6 +23,21 @@ class LoginUserEvent extends AuthEvent {
   List<Object?> get props => [loginModel];
 }
 
+class UpdateNameUserEvent extends AuthEvent {
+  UpdateNameUserEvent({required this.firstname,required this.lastname});
+
+  final String firstname;
+  final String lastname;
+
+  @override
+  List<Object?> get props => [firstname,lastname];
+}
+
+class InfoUserEvent extends AuthEvent {
+  @override
+  List<Object?> get props => [];
+}
+
 class RegisterUserEvent extends AuthEvent {
   RegisterUserEvent({required this.userModel});
 
@@ -47,16 +62,16 @@ class LogOutUserEvent extends AuthEvent {
 }
 
 class AuthVerifyOtpCoderEvent extends AuthEvent {
-  final int password;
+  final int code;
   final String phoneNumber;
 
   AuthVerifyOtpCoderEvent({
     required this.phoneNumber,
-    required this.password,
+    required this.code,
   });
 
   @override
-  List<Object?> get props => [phoneNumber, password];
+  List<Object?> get props => [phoneNumber, code];
 }
 
 class AuthForgetPasswordEvent extends AuthEvent {
@@ -75,4 +90,13 @@ class AuthUpdatePasswordEvent extends AuthEvent {
 
   @override
   List<Object?> get props => [newPassword];
+}
+
+class SendSmsEvent extends AuthEvent {
+  final String phone;
+
+  SendSmsEvent({required this.phone});
+
+  @override
+  List<Object?> get props => [phone];
 }

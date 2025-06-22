@@ -17,3 +17,18 @@ extension ForString on String {
     return false;
   }
 }
+
+String parseHtml(String htmlString) {
+  return htmlString
+      .replaceAll(RegExp(r"<[^>]*>"), '')
+      .replaceAll('&nbsp;', ' ')
+      .trim();
+}
+String decodeHtml(String html) {
+  return html
+      .replaceAll('&ldquo;', '“')
+      .replaceAll('&rdquo;', '”')
+      .replaceAll('&#39;', "'")
+      .replaceAll('&rsquo;', '’')
+      .replaceAll('&diams;', '♦');
+}

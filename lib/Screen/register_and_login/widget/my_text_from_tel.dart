@@ -19,6 +19,7 @@ class MyTextFromFieldTel extends StatelessWidget {
     required this.controller,
     required this.regExp,
     required this.errorText,
+    required this.focusNode
   });
 
   final String labelText;
@@ -31,10 +32,13 @@ class MyTextFromFieldTel extends StatelessWidget {
   final TextInputAction textInputAction;
   final ValueChanged<String> valueChanged;
   final TextEditingController controller;
+  final FocusNode focusNode;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      focusNode: focusNode,
+      keyboardType: TextInputType.phone,
       controller: controller,
       inputFormatters: perefixIcon.contains("call")
           ? [
@@ -58,20 +62,30 @@ class MyTextFromFieldTel extends StatelessWidget {
       },
       obscureText: obzorText,
       decoration: InputDecoration(
-        focusedBorder: UnderlineInputBorder(
+        focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: AppColors.c257CFF,
-            width: 1.we(),
+            width: 1.w,
           ),
         ),
-        enabledBorder: UnderlineInputBorder(
+        enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: AppColors.cE9ECF2,
-            width: 1.we(),
+            width: 1.w,
           ),
         ),
+        focusedErrorBorder:OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.red,
+            width: 1.w,
+          ),),
+        errorBorder:OutlineInputBorder(
+      borderSide: BorderSide(
+      color: Colors.red,
+        width: 1.w,
+      ),),
         label: Text(
-          "Type your phone number",
+          "Telefon raqamingizni yozing",
           style: AppTextStyle.urbanistRegular.copyWith(
             fontSize: 14.sp,
             color: AppColors.c7E8CA0,
