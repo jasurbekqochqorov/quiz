@@ -1,3 +1,4 @@
+import 'package:quiz/data/model/answerResult/aswer_result_model.dart';
 import 'package:quiz/data/model/coin_model/coin_model.dart';
 import 'package:quiz/data/model/questionMain/question_main_model.dart';
 import 'package:quiz/data/model/resultMain/result_main_model.dart';
@@ -13,11 +14,13 @@ class TestState {
     required this.statusMessage,
     required this.questions,
     required this.coinModel,
-    required this.resultMainModel
+    required this.resultMainModel,
+    required this.answer
   });
 
 
   final CoinModel coinModel;
+  final AnswerResultModel answer;
   final QuestionMainModel questions;
   final String errorText;
   final String statusMessage;
@@ -35,8 +38,10 @@ class TestState {
     String? statusMessage,
     String? userToken,
     ResultMainModel? resultMainModel,
+    AnswerResultModel? answer
   }) {
     return TestState(
+      answer: answer ?? this.answer,
       resultMainModel:  resultMainModel ?? this.resultMainModel,
       coinModel: coinModel ?? this.coinModel,
       questions: questions ?? this.questions,

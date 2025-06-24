@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../utils/colors/app_colors.dart';
 import '../../../../utils/images/app_images.dart';
@@ -20,7 +19,7 @@ class FirstWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.r),
           border: Border.all(width: 1.r,color: AppColors.black)
       ),
-      padding: EdgeInsets.symmetric(vertical:10.h),
+      padding: EdgeInsets.symmetric(vertical:10.h,horizontal: 8.w),
       child: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -29,9 +28,11 @@ class FirstWidget extends StatelessWidget {
               visible: isVisible!,
               child: Icon(Icons.change_circle_outlined)),
           SizedBox(width: 5.w,),
-          Text(title,style: AppTextStyle.urbanistSemiBold.copyWith(
-              color: AppColors.white,fontSize: 20.sp
-          ),),
+          Expanded(
+            child: Text(title,style: AppTextStyle.urbanistSemiBold.copyWith(
+                color: AppColors.white,fontSize: 16.sp
+            ),),
+          ),
         ],)
       ),
     );

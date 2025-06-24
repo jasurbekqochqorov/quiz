@@ -15,4 +15,9 @@ class TestRepository {
   Future<NetworkResponse> getResult({required String token,required int id}) async {
     return await ApiProvider.getResult(token: token,id: id);
   }
+
+  Future<NetworkResponse> postResult({required List<Map<String,dynamic>> answers,required int id}) async {
+    return await ApiProvider.postResult(id: id,answers: answers
+    );
+  }
 }

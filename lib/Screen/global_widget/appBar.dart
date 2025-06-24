@@ -56,7 +56,7 @@ class GlobalAppBar extends StatelessWidget {
             onPressed:onTap,
             child:Text('Testni yakunlash',style: AppTextStyle.urbanistMedium.copyWith(
                 color:AppColors.black,fontSize: 16.sp
-            ),)):Text('')
+            ),)):Text("")
       ],),
     );
   }

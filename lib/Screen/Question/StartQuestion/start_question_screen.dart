@@ -10,6 +10,7 @@ import '../../../utils/colors/app_colors.dart';
 import '../../../utils/styles/app_text_style.dart';
 import '../../../utils/utility_functions.dart';
 import '../Quiz/quiz_screen.dart';
+import '../Result/result_screen.dart';
 
 class QuestionScreen extends StatefulWidget {
   const QuestionScreen({super.key, required this.subjectModel});
@@ -26,7 +27,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
       appBar: AppBar(
         leading: IconButton(onPressed: (){
           context.read<TestBloc>().add(TestAllEvent(subjectId: 0));
-          Navigator.pop(context);
+          Navigator.pushReplacement(context,MaterialPageRoute(builder: (context){
+            return ResultScreen();
+          }));
         }, icon: Icon(Icons.arrow_back)),
         title: Text("Test haqida ma'lumot",style: AppTextStyle.urbanistBold.copyWith(fontSize: 20.sp)),
       ),
@@ -86,7 +89,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
                                           color: AppColors.black, fontSize: 16.sp),
                                       children: [
                                         TextSpan(
-                                            text: ' ${getMinutelyText(widget.subjectModel.questionCount*120)}',
+                                            text: ' ${widget.subjectModel.duration} min',
                                             style: AppTextStyle.urbanistBold.copyWith(
                                                 color: AppColors.black,
                                                 fontSize: 16.sp))
@@ -104,10 +107,10 @@ class _QuestionScreenState extends State<QuestionScreen> {
                           ),
                         )),
                     BottomContainer(
-                      k: widget.subjectModel.questionCount*120,
+                      k: widget.subjectModel.duration*60,
                       onTap: (){
                         Navigator.pushReplacement(context,MaterialPageRoute(builder: (context){
-                          return QuizScreen(questionModel: state.questions.questions,subjectModel:widget.subjectModel,);
+                          return QuizScreen(questionModel: state.questions,subjectModel:widget.subjectModel,);
                         }));
                       },
                     ),

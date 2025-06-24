@@ -28,10 +28,11 @@ class _InformationState extends State<Information> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(children: [
-            Text(widget.subjectModel.title,style: AppTextStyle.urbanistRegular.copyWith(
-              color: AppColors.black,fontSize: 16.sp,
-            ),),
-            Spacer(),
+            Expanded(
+              child: Text(widget.subjectModel.title,maxLines: 2,style: AppTextStyle.urbanistRegular.copyWith(
+                color: AppColors.black,fontSize: 12.sp,
+              ),),
+            ),
             Icon(Icons.watch_later,color: AppColors.black,size: 22.sp,),
             SizedBox(width:7.w,),
             Text(widget.title,style: AppTextStyle.urbanistMedium.copyWith(

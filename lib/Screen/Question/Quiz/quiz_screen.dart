@@ -7,13 +7,16 @@ import 'package:quiz/Screen/Question/Quiz/widget/information.dart';
 import 'package:quiz/Screen/Question/Quiz/widget/questions_button.dart';
 import 'package:quiz/Screen/tabbox/tab_box_screen.dart';
 import 'package:quiz/data/model/Question/question_model.dart';
+import 'package:quiz/data/model/questionMain/question_main_model.dart';
 import 'package:quiz/data/model/test_model/test_model.dart';
 import '../../../blocs/test/test_bloc.dart';
 import '../../../blocs/test/test_event.dart';
+import '../../../data/local/local.dart';
 import '../../../utils/colors/app_colors.dart';
 import '../../../utils/extention/extantions.dart';
 import '../../../utils/styles/app_text_style.dart';
 import '../../../utils/utility_functions.dart';
+import '../../RusltMain/result_main_screen.dart';
 import '../../global_widget/appBar.dart';
 import '../Result/result_screen.dart';
 
@@ -21,7 +24,7 @@ class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key, required this.questionModel, required this.subjectModel});
 
   final TestModel subjectModel;
-  final List<QuestionModel> questionModel;
+  final QuestionMainModel questionModel;
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
@@ -33,10 +36,12 @@ class _QuizScreenState extends State<QuizScreen> {
   int activeVariant = 0;
   int activeAnswer=-1;
   Map<int, int> selectedAnswer = {};
+  List<Map<String,dynamic>> selectTo = [];
   bool _isMounted = true;
+  String answer1="";
 
   Future<void> _timerLogic() async {
-    for (int i = widget.subjectModel.questionCount * 120; i > 0; i--) {
+    for (int i = widget.questionModel.deadline; i > 0; i--) {
       if (!_isMounted) break;
       if (mounted) {
         setState(() {
@@ -45,7 +50,31 @@ class _QuizScreenState extends State<QuizScreen> {
       }
       await Future.delayed(const Duration(seconds: 1));
     }
-    if (_isMounted) {
+    if (_isMounted){
+      for(int i=0;i<selectedAnswer.length; i++){
+        answer1="";
+        if(selectedAnswer[i]==1){
+          answer1="a";
+        }
+        else if(selectedAnswer[i]==2){
+          answer1="b";
+        }
+        else if(selectedAnswer[i]==3){
+          answer1="c";
+        }
+        else if(selectedAnswer[i]==4){
+          answer1="d";
+        }
+        if(answer1.isNotEmpty){
+          Map<String,dynamic> ans={
+            "user_test":widget.questionModel.id,
+            "question":i+1,
+            "user_answer":"$answer1"
+          };
+          selectTo.add(ans);
+        }
+      }
+      context.read<TestBloc>().add(PostResultAllEvent(answers:selectTo, id:widget.questionModel.id));
       _navigateToResultScreen();
     }
   }
@@ -53,8 +82,8 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   void initState() {
     super.initState();
-    for (int i = 0; i < widget.questionModel.length; i++) {
-      selectedAnswer[i] = 0;
+    for (int i = 0; i < widget.questionModel.questions.length; i++) {
+      selectedAnswer[i]=0;
     }
     _timerLogic();
   }
@@ -70,20 +99,43 @@ class _QuizScreenState extends State<QuizScreen> {
     return AnnotatedRegion(
       value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
       child: Scaffold(
-        body: (widget.questionModel.isNotEmpty)
+        body: (widget.questionModel.questions.isNotEmpty)
             ? Column(
           children: [
             GlobalAppBar(
               title: "Testlar",
-              isButton: true,
-              onTap: () {
+              isButton:true,
+              onTap: () async{
                 selectedAnswer[activeIndex] = activeVariant;
-                setState(() {});
+                for(int i=0;i<selectedAnswer.length; i++){
+                  answer1="";
+                  if(selectedAnswer[i]==1){
+                    answer1="a";
+                  }
+                  else if(selectedAnswer[i]==2){
+                    answer1="b";
+                  }
+                  else if(selectedAnswer[i]==3){
+                    answer1="c";
+                  }
+                  else if(selectedAnswer[i]==4){
+                    answer1="d";
+                  }
+                  if(answer1.isNotEmpty){
+                    Map<String,dynamic> ans={
+                      "user_test":widget.questionModel.id,
+                      "question":i+1,
+                      "user_answer":"$answer1"
+                    };
+                    selectTo.add(ans);
+                  }
+                }
+                context.read<TestBloc>().add(PostResultAllEvent(answers:selectTo, id:widget.questionModel.id));
                 _navigateToResultScreen();
               },
               onPressed: () {
                 context.read<TestBloc>().add(TestAllEvent(subjectId: 0));
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
                   return TabScreen();
                 }));
               },
@@ -99,7 +151,7 @@ class _QuizScreenState extends State<QuizScreen> {
               child: Container(
                 width: double.infinity,
                 padding: EdgeInsets.only(
-                    left: 32.w, right: 32.w, top: 40.h, bottom: 20.h),
+                    left: 32.w, right: 32.w, top: 10.h, bottom: 20.h),
                 decoration: BoxDecoration(
                     color: AppColors.white,
                     border: Border.all(width: 2.sp, color: AppColors.c257CFF),
@@ -116,19 +168,19 @@ class _QuizScreenState extends State<QuizScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Savol:${activeIndex + 1}/${widget.questionModel.length}",
+                                "Savol:${activeIndex + 1}/${widget.questionModel.questions.length}",
                                 style: AppTextStyle.urbanistMedium.copyWith(
                                     color: AppColors.black, fontSize: 20.sp),
                               ),
                               SizedBox(height: 12.h),
                               Text(
-                                decodeHtml(parseHtml(widget.questionModel[activeIndex].text)),
+                                decodeHtml(parseHtml(widget.questionModel.questions[activeIndex].text)),
                                 style: AppTextStyle.urbanistSemiBold.copyWith(
                                   color: AppColors.black,
                                   fontSize: 17.sp,
                                 ),
                               ),
-                              if(widget.questionModel[activeIndex].image.isNotEmpty)Image.network(widget.questionModel[activeIndex].image),
+                              if(widget.questionModel.questions[activeIndex].image.isNotEmpty)Image.network(widget.questionModel.questions[activeIndex].image),
                               SizedBox(height: 14.h),
                               QuestionsButton(
                                   onTap: () {
@@ -137,7 +189,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                   },
                                   isActive: activeVariant == 1,
                                   questionVariant: "A. ",
-                                  variant:parseHtml(widget.questionModel[activeIndex].a)),
+                                  variant:decodeHtml(parseHtml(widget.questionModel.questions[activeIndex].a))),
                               QuestionsButton(
                                   onTap: () {
                                     activeVariant = 2;
@@ -145,7 +197,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                   },
                                   isActive: activeVariant == 2,
                                   questionVariant: "B. ",
-                                  variant:parseHtml(widget.questionModel[activeIndex].b)),
+                                  variant:decodeHtml(parseHtml(widget.questionModel.questions[activeIndex].b))),
                               QuestionsButton(
                                   onTap: () {
                                     activeVariant = 3;
@@ -153,7 +205,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                   },
                                   isActive: activeVariant == 3,
                                   questionVariant: "C. ",
-                                  variant: parseHtml(widget.questionModel[activeIndex].c)),
+                                  variant: decodeHtml(parseHtml(widget.questionModel.questions[activeIndex].c))),
                               QuestionsButton(
                                   onTap: () {
                                     activeVariant = 4;
@@ -161,7 +213,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                   },
                                   isActive: activeVariant == 4,
                                   questionVariant: "D. ",
-                                  variant: parseHtml(widget.questionModel[activeIndex].d)),
+                                  variant: decodeHtml(parseHtml(widget.questionModel.questions[activeIndex].d))),
                             ],
                           )
                         ],
@@ -169,17 +221,19 @@ class _QuizScreenState extends State<QuizScreen> {
                     ),
                     ButtonDown(
                       onPrevious: () {
+                        debugPrint("ASD--${selectedAnswer}");
                         activeIndex--;
                         activeVariant = selectedAnswer[activeIndex]!;
                         setState(() {});
                       },
                       onNext: () {
+                        debugPrint("ASD++${selectedAnswer}");
                         selectedAnswer[activeIndex] = activeVariant;
                         activeIndex++;
                         activeVariant = selectedAnswer[activeIndex]!;
                         setState(() {});
                       },
-                      questionModel: widget.questionModel,
+                      questionModel: widget.questionModel.questions,
                       activeIndex: activeIndex,
                     ),
                   ],
@@ -195,7 +249,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void _navigateToResultScreen() {
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-      return ResultScreen();
+      return ResultMainScreen(questionMainModel: widget.questionModel,);
     }));
   }
 }

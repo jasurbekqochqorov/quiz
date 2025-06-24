@@ -248,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             (test.isFree)?((test.userTestModel.id!=0)?
                                             TextButton(onPressed:(){
                                               context.read<TestBloc>().add(ResultAllEvent(token: StorageRepository.getString(key: "access"),id:test.userTestModel.id!));
-                                              Navigator.push(context,MaterialPageRoute(builder: (context){
+                                              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context){
                                                 return ResultScreen();
                                               }));
                                               debugPrint("AAAAAA${test.userTestModel.id}");

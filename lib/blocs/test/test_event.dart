@@ -32,6 +32,15 @@ class ResultAllEvent extends TestEvent {
   List<Object?> get props => [token,id];
 }
 
+class PostResultAllEvent extends TestEvent {
+  PostResultAllEvent({required this.answers,required this.id});
+  final List<Map<String,dynamic>> answers;
+  final int id;
+
+  @override
+  List<Object?> get props => [answers];
+}
+
 
 
 

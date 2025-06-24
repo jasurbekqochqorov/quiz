@@ -28,8 +28,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     context.read<RankBloc>().add(RankEvent());
-    debugPrint("BOSH:${StorageRepository.getString(key: 'access')}");
-    context.read<TestBloc>().add(TestAllEvent(subjectId: 0));
     Future.delayed(
       const Duration(seconds: 3),
       () {
@@ -47,12 +45,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.black,
+      backgroundColor: AppColors.white,
       body: Center(
-        child: Image.asset(
-          AppImages.splash,
-          width: 350.w,
-          height: 350.h,
+        child: Image.network(
+          "https://pmtests.uz/static/media/logo.4498d5b43416f763567c.jpg",
+          width: 250.w,
+          height: 250.h,
           fit: BoxFit.cover,
         ),
       ),

@@ -26,6 +26,7 @@ class _TabScreenState extends State<TabScreen> {
   ];
   @override
   void initState() {
+    context.read<TestBloc>().add(TestAllEvent(subjectId: 0));
     context.read<AuthBloc>().add(InfoUserEvent());
     super.initState();
   }

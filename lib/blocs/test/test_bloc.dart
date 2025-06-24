@@ -3,6 +3,7 @@ import 'package:quiz/blocs/auth/auth_state.dart';
 import 'package:quiz/blocs/test/test_event.dart';
 import 'package:quiz/blocs/test/test_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quiz/data/model/answerResult/aswer_result_model.dart';
 import 'package:quiz/data/model/resultMain/result_main_model.dart';
 import 'package:quiz/data/model/test_model/test_model.dart';
 import 'package:quiz/data/repositories/test_repository.dart';
@@ -14,6 +15,7 @@ class TestBloc extends Bloc<TestEvent,TestState> {
       : _testRepository = testRepository,
         super(
           TestState(
+            answer: AnswerResultModel.initial(),
             coinModel: CoinModel.initial(),
             questions: QuestionMainModel.initial(),
             errorText: "",
@@ -28,6 +30,7 @@ class TestBloc extends Bloc<TestEvent,TestState> {
     on<TestAllEvent>(_getAllTest);
     on<QuestionAllEvent>(_getAllQuestion);
     on<ResultAllEvent>(_getAllResult);
+    on<PostResultAllEvent>(_postResult);
   }
 
   final TestRepository _testRepository;
@@ -85,6 +88,29 @@ class TestBloc extends Bloc<TestEvent,TestState> {
             resultMainModel: response.data as ResultMainModel,
             formStatus: FormStatus.success,
             statusMessage: "Natijalar olindi"
+        ));
+      } else {
+        emit(state.copyWith(
+          formStatus: FormStatus.error,
+        ));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+        formStatus: FormStatus.error,
+      ));
+    }
+  }
+
+  Future<void> _postResult(PostResultAllEvent event, Emitter<TestState> emit) async {
+    emit(state.copyWith(formStatus: FormStatus.loading));
+    try {
+      final response = await _testRepository.postResult(answers: event.answers,id: event.id);
+      if (response.errorText=='not') {
+        debugPrint("FDS");
+        emit(state.copyWith(
+            formStatus: FormStatus.success,
+            answer: response.data as AnswerResultModel,
+            statusMessage: "Test natijalar yuborildi"
         ));
       } else {
         emit(state.copyWith(

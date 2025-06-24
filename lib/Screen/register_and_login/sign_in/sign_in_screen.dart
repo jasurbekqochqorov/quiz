@@ -216,7 +216,7 @@ class _SignInScreenState extends State<SignInScreen> {
           }
           if (state.statusMessage=="logged" && state.formStatus==FormStatus.authenticated) {
             StorageRepository.setString(key: "key", value:state.userModel.accessToken);
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
                   return TabScreen();
                 },
               ),

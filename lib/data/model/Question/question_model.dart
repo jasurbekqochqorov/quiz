@@ -1,4 +1,4 @@
-class QuestionModel{
+class   QuestionModel{
   final int? id;
   final int number;
   final String image;

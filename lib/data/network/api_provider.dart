@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:quiz/data/local/local.dart';
+import 'package:quiz/data/model/answerResult/aswer_result_model.dart';
 import 'package:quiz/data/model/login_model/login_model.dart';
 import 'package:quiz/data/model/questionMain/question_main_model.dart';
 import 'package:quiz/data/model/resultMain/result_main_model.dart';
@@ -312,6 +313,34 @@ class ApiProvider {
         return NetworkResponse(
           data:ResultMainModel.fromJson(json),
           errorText:"not",
+        );
+      } else {
+        return NetworkResponse(
+          errorText: "Server xatosi: ${response.statusCode}",
+        );
+      }
+    } catch (e) {
+      return NetworkResponse(
+        errorText: "Tarmoq xatosi: $e",
+      );
+    }
+  }
+
+  static Future<NetworkResponse> postResult({required List<Map<String,dynamic>> answers,required int id}) async {
+    try {
+      Uri uri = Uri.parse("https://pmtests.uz/v1/tests/check-user-test/$id/");
+      http.Response response = await http.post(
+        uri,headers:{
+          "Authorization": "Bearer ${StorageRepository.getString(key: "access")}",
+          "Content-Type": "application/json",
+      },
+        body: jsonEncode(answers)
+      );
+      debugPrint("AAAAAAAAAAAAAAAAAAAAAA${response.body}");
+        if (response.statusCode == 200){
+        return NetworkResponse(
+         errorText:"not",
+          data:AnswerResultModel.fromJson(jsonDecode(response.body))
         );
       } else {
         return NetworkResponse(
