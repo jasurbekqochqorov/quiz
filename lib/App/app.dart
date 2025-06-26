@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:quiz/blocs/payment/payment_bloc.dart';
 import 'package:quiz/blocs/rank/rank_bloc.dart';
 import 'package:quiz/blocs/test/test_bloc.dart';
 import 'package:quiz/data/repositories/test_repository.dart';
@@ -31,6 +32,10 @@ class App extends StatelessWidget {
           BlocProvider(
             create: (context) =>
                 RankBloc(testRepository: context.read<TestRepository>()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                PaymentBloc(testRepository: context.read<TestRepository>()),
           ),
         ],
         child: ScreenUtilInit(

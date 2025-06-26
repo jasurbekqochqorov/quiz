@@ -19,6 +19,7 @@ class AppImages {
   static const String cansel  = "assets/icons/cansel.svg";
   static const String calendar  = "assets/icons/calendar.svg";
   static const String watch  = "assets/icons/watch.svg";
+  static const String empty  = "assets/lottie/empty.json";
 
   //.svg
 

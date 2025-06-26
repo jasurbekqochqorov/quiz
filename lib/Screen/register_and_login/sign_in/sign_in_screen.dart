@@ -115,7 +115,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       );
                     },
                     child: Text(
-                      "Forgot Password?",
+                      "Parolni unutdingizmi?",
                       style: AppTextStyle.urbanistBold.copyWith(
                         fontSize: 14.sp,
                         color: AppColors.c257CFF,

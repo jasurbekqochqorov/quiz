@@ -5,7 +5,7 @@ import 'package:quiz/data/model/login_model/login_model.dart';
 import 'package:quiz/data/model/questionMain/question_main_model.dart';
 import 'package:quiz/data/model/resultMain/result_main_model.dart';
 import 'package:quiz/data/model/userReyting/user_reyting_model.dart';
-import 'package:quiz/data/model/user_info/user_info_screen.dart';
+import 'package:quiz/data/model/user_info/user_info_model.dart';
 import 'package:quiz/data/model/user_model/user_model.dart';
 import 'package:quiz/data/model/networ_respons_model/network_response.dart';
 import 'package:flutter/cupertino.dart';
@@ -341,6 +341,37 @@ class ApiProvider {
         return NetworkResponse(
          errorText:"not",
           data:AnswerResultModel.fromJson(jsonDecode(response.body))
+        );
+      } else {
+        return NetworkResponse(
+          errorText: "Server xatosi: ${response.statusCode}",
+        );
+      }
+    } catch (e) {
+      return NetworkResponse(
+        errorText: "Tarmoq xatosi: $e",
+      );
+    }
+  }
+  static Future<NetworkResponse> postPayment({required int summa}) async {
+    try {
+      Uri uri = Uri.parse("https://pmtests.uz/v1/users/add-account-funds/");
+      http.Response response = await http.post(
+        uri,headers:{
+          "Authorization": "Bearer ${StorageRepository.getString(key: "access")}",
+          "Content-Type": "application/json",
+      },
+        body:"""
+        {
+        "amount":$summa
+        }
+        """
+      );
+      debugPrint("AAAAAAAAAAAAAAAAAAAAAA${response.body}");
+        if (response.statusCode == 200){
+        return NetworkResponse(
+         errorText:"not",
+          data:"${jsonDecode(response.body)["click"]}"
         );
       } else {
         return NetworkResponse(

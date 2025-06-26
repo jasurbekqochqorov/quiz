@@ -1,6 +1,6 @@
 import 'package:quiz/data/model/user_model/user_model.dart';
 
-import '../../data/model/user_info/user_info_screen.dart';
+import '../../data/model/user_info/user_info_model.dart';
 
 class AuthState {
   const AuthState({

@@ -5,6 +5,7 @@ import 'package:quiz/blocs/auth/auth_state.dart';
 import 'package:quiz/blocs/rank/rank_bloc.dart';
 import 'package:quiz/blocs/rank/rank_state.dart';
 import 'package:quiz/utils/styles/app_text_style.dart';
+import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 class UsersRankScreen extends StatefulWidget {
   const UsersRankScreen({super.key});
@@ -48,7 +49,7 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
                 child: Center(child: Text("...", style: AppTextStyle.urbanistRegular.copyWith(fontSize: 14.sp))),
               );
             } else {
-              return InkWell(
+              return ZoomTapAnimation(
                 onTap: () {
                   setState(() {
                     currentPage = page;
@@ -99,6 +100,8 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ...List.generate(paginatedUsers.length, (index) {
                     final user = paginatedUsers[index];

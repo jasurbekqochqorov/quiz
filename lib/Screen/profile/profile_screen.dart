@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:quiz/Screen/Question/Result/result_screen.dart';
+import 'package:quiz/Screen/profile/balances/balance_history_screen.dart';
+import 'package:quiz/Screen/profile/hisob/payment_screen.dart';
 import 'package:quiz/Screen/profile/myTest/my_test_screen.dart';
 import 'package:quiz/Screen/profile/updateName/update_screen.dart';
 import 'package:quiz/blocs/auth/auth_bloc.dart';
@@ -30,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body:BlocBuilder<AuthBloc,AuthState>(builder: (context,state){
         if(state.formStatus==FormStatus.authenticated){
           return  Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w,vertical: 50.h),
+            padding: EdgeInsets.only(left: 20.w,top: 50.h,right: 20.w,bottom: 10.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -42,7 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       color: AppColors.white
                   ),
                   child:Row(children: [
-                    (state.userInfoModel.photo.isEmpty)?Icon(Icons.account_circle_rounded,size: 34.sp,):ClipRRect(borderRadius: BorderRadius.circular(100),child: Image.network(state.userInfoModel.photo,width: 50.w,height: 50.h,fit: BoxFit.cover,),),
+                    (state.userInfoModel.photo.isEmpty)?Icon(Icons.account_circle_rounded,size: 34.sp,):ClipRRect(borderRadius: BorderRadius.circular(100),child: Image.network(state.userInfoModel.photo,width: 50.sp,height: 50.sp,fit: BoxFit.cover,),),
                     SizedBox(width: 20.w,),
                     Text("${state.userInfoModel.firstName} ${state.userInfoModel.lastName}",style: AppTextStyle.urbanistSemiBold,),
                     Spacer(),
@@ -50,99 +53,105 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Navigator.pushReplacement(context,MaterialPageRoute(builder: (context){
                         return UpdateNameScreen(firstName:state.userInfoModel.firstName, lastName:state.userInfoModel.lastName);
                       }));
-                    }, icon: Icon(Icons.edit)),
+                    }, icon: Icon(Icons.edit,size: 16.sp,)),
                   ],),
                 ),
                 SizedBox(height: 30.h,),
-                ListTile(
-                  tileColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
-                  leading: Icon(Icons.person,),
-                  splashColor: Colors.blue,
-                  onTap:() {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-                      return SignInScreen();
-                    }));
-                  },
-                  title: Text(state.userInfoModel.firstName,style: AppTextStyle.urbanistSemiBold.copyWith(color: AppColors.black.withOpacity(0.3)),),
-                ),
-                SizedBox(height: 10.h,),
-                ListTile(
-                  tileColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
-                  leading: Icon(Icons.person),
-                  splashColor: Colors.blue,
-                  onTap:() {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-                      return SignInScreen();
-                    }));
-                  },
-                  title: Text(state.userInfoModel.lastName,style: AppTextStyle.urbanistSemiBold.copyWith(color: AppColors.black.withOpacity(0.3)),),
-                ),
-                SizedBox(height: 10.h,),
-                ListTile(
-                  tileColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
-                  leading: Icon(Icons.phone,),
-                  splashColor: Colors.blue,
-                  onTap:() {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-                      return SignInScreen();
-                    }));
-                  },
-                  title: Text("+${state.userInfoModel.phone}",style: AppTextStyle.urbanistSemiBold.copyWith(color: AppColors.black.withOpacity(0.3)),),
-                ),
-                SizedBox(height: 10.h,),
-                ListTile(
-                  tileColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
-                  leading: Icon(Icons.key),
-                  splashColor: Colors.blue,
-                  onTap:() {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-                      return SignInScreen();
-                    }));
-                  },
-                  title:Text(password(state.userInfoModel.passwordLength),style: AppTextStyle.urbanistSemiBold.copyWith(color: AppColors.black.withOpacity(0.3)),),
-                ),
-                SizedBox(height: 10.h,),
-                ListTile(
-                  tileColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
-                  leading: Icon(Icons.account_balance),
-                  splashColor: Colors.blue,
-                  onTap:() {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-                      return SignInScreen();
-                    }));
-                  },
-                  title:Text("${state.userInfoModel.checkBalance} so'm",style: AppTextStyle.urbanistSemiBold.copyWith(color: AppColors.black.withOpacity(0.3)),),
-                ),
-                SizedBox(height: 10.h,),
-                ListTile(
-                  tileColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
-                  splashColor: Colors.blue,
-                  onTap:() {
-                    Navigator.push(context, MaterialPageRoute(builder: (context){
-                      return MyTestScreen(userTestResultModel:state.userInfoModel.userTest,);
-                    }));
-                  },
-                  title: Text("Mening testlarim",style: AppTextStyle.urbanistSemiBold,),
-                ),
-                SizedBox(height: 10.h,),
-                ListTile(
-                  tileColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
-                  leading: Icon(Icons.logout,color: Colors.red,),
-                  splashColor: Colors.blue,
-                  onTap:() {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-                      return SignInScreen();
-                    }));
-                  },
-                  title: Text("Log out",style: AppTextStyle.urbanistSemiBold.copyWith(color: Colors.red),),
-                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        ListTile(
+                          tileColor: Colors.white,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
+                          leading: Icon(Icons.person,size: 22.sp,),
+                          splashColor: Colors.blue,
+                          title: Text(state.userInfoModel.firstName,style: AppTextStyle.urbanistSemiBold.copyWith(color: AppColors.black.withOpacity(0.3)),),
+                        ),
+                        SizedBox(height: 10.h,),
+                        ListTile(
+                          tileColor: Colors.white,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
+                          leading: Icon(Icons.person,size: 22.sp),
+                          splashColor: Colors.blue,
+                          title: Text(state.userInfoModel.lastName,style: AppTextStyle.urbanistSemiBold.copyWith(color: AppColors.black.withOpacity(0.3)),),
+                        ),
+                        SizedBox(height: 10.h,),
+                        ListTile(
+                          tileColor: Colors.white,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
+                          leading: Icon(Icons.phone,size: 22.sp),
+                          splashColor: Colors.blue,
+                          title: Text("+${state.userInfoModel.phone}",style: AppTextStyle.urbanistSemiBold.copyWith(color: AppColors.black.withOpacity(0.3)),),
+                        ),
+                        SizedBox(height: 10.h,),
+                        ListTile(
+                          tileColor: Colors.white,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
+                          leading: Icon(Icons.key,size: 22.sp),
+                          splashColor: Colors.blue,
+                          title:Text(password(state.userInfoModel.passwordLength),style: AppTextStyle.urbanistSemiBold.copyWith(color: AppColors.black.withOpacity(0.3)),),
+                        ),
+                        SizedBox(height: 10.h,),
+                        ListTile(
+                          tileColor: Colors.white,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
+                          leading: Icon(Icons.account_balance,size: 22.sp),
+                          splashColor: Colors.blue,
+                          title:Text("${state.userInfoModel.checkBalance} so'm",style: AppTextStyle.urbanistSemiBold.copyWith(color: AppColors.black.withOpacity(0.3)),),
+                        ),
+                        SizedBox(height: 10.h,),
+                        ListTile(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context){
+                              return PaymentScreen(userInfoModel: state.userInfoModel,);
+                            }));
+                          },
+                          tileColor: Colors.white,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
+                          splashColor: Colors.blue,
+                          title:Text("Hisobni to'ldirish",style: AppTextStyle.urbanistSemiBold,),
+                        ),
+                        SizedBox(height: 10.h,),
+                        ListTile(
+                          tileColor: Colors.white,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
+                          splashColor: Colors.blue,
+                          onTap:() {
+                            Navigator.push(context, MaterialPageRoute(builder: (context){
+                              return BalanceHistoryScreen(balance:state.userInfoModel.balances,);
+                            }));
+                          },
+                          title: Text("Hisob tarixim",style: AppTextStyle.urbanistSemiBold,),
+                        ),
+                        ListTile(
+                          tileColor: Colors.white,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
+                          splashColor: Colors.blue,
+                          onTap:() {
+                            Navigator.push(context, MaterialPageRoute(builder: (context){
+                              return MyTestScreen(userTestResultModel:state.userInfoModel.userTest,);
+                            }));
+                          },
+                          title: Text("Mening testlarim",style: AppTextStyle.urbanistSemiBold,),
+                        ),
+                        SizedBox(height: 10.h,),
+                        ListTile(
+                          tileColor: Colors.white,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
+                          leading: Icon(Icons.logout,color: Colors.red,size: 22.sp),
+                          splashColor: Colors.blue,
+                          onTap:() {
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+                              return SignInScreen();
+                            }));
+                          },
+                          title: Text("Log out",style: AppTextStyle.urbanistSemiBold.copyWith(color: Colors.red),),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
           );

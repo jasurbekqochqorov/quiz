@@ -20,4 +20,8 @@ class TestRepository {
     return await ApiProvider.postResult(id: id,answers: answers
     );
   }
+
+  Future<NetworkResponse> postPayment({required int summa}) async {
+    return await ApiProvider.postPayment(summa: summa);
+  }
 }

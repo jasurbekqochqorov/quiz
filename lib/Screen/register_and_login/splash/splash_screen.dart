@@ -28,6 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     context.read<RankBloc>().add(RankEvent());
+    debugPrint("TOKEN#:${StorageRepository.getString(key: "access")}");
     Future.delayed(
       const Duration(seconds: 3),
       () {

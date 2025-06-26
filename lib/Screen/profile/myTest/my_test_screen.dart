@@ -4,8 +4,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'package:quiz/data/userTest/user_test_model.dart';
 import 'package:quiz/utils/colors/app_colors.dart';
+import 'package:quiz/utils/images/app_images.dart';
 import 'package:quiz/utils/styles/app_text_style.dart';
 
 class MyTestScreen extends StatefulWidget {
@@ -21,7 +23,7 @@ class _MyTestScreenState extends State<MyTestScreen> {
     return Scaffold(
       appBar: AppBar(title: Text("Mening testlarim",style: AppTextStyle.urbanistMedium.copyWith(fontSize: 16.sp)),),
 
-      body:SingleChildScrollView(child:Column(children:[
+      body:(widget.userTestResultModel.isEmpty)?Center(child: LottieBuilder.asset(AppImages.empty),):SingleChildScrollView(child:Column(children:[
         Container(
           margin: EdgeInsets.symmetric(horizontal: 16.w,vertical: 10.h),
           padding: EdgeInsets.symmetric(horizontal:12.w,vertical: 7.h),
@@ -45,8 +47,8 @@ class _MyTestScreenState extends State<MyTestScreen> {
         ... List.generate(widget.userTestResultModel.length,(index){
           return Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16.r),
-              color: AppColors.white
+                borderRadius: BorderRadius.circular(16.r),
+                color: AppColors.white
             ),
             margin: EdgeInsets.symmetric(horizontal: 16.w,vertical: 10.h),
             padding: EdgeInsets.symmetric(horizontal:12.w,vertical: 7.h),
@@ -64,8 +66,8 @@ class _MyTestScreenState extends State<MyTestScreen> {
               RichText(text:TextSpan(text:"${widget.userTestResultModel[index].score.toInt()}",
                   style: AppTextStyle.urbanistMedium.copyWith(color: Colors.green,fontSize: 12.sp),
                   children: [
-                TextSpan(text:"/${widget.userTestResultModel[index].questionCount}",style: AppTextStyle.urbanistMedium.copyWith(fontSize: 12.sp))
-              ]),),
+                    TextSpan(text:"/${widget.userTestResultModel[index].questionCount}",style: AppTextStyle.urbanistMedium.copyWith(fontSize: 12.sp))
+                  ]),),
             ],),
           );
         })

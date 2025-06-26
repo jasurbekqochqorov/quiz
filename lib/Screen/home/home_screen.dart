@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'package:quiz/Screen/Question/Result/result_screen.dart';
 import 'package:quiz/Screen/Question/StartQuestion/start_question_screen.dart';
 import 'package:quiz/blocs/auth/auth_bloc.dart';
@@ -69,10 +70,10 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 50.h),
+          SizedBox(height: 40.h),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Text("Bosh sahifa", style: AppTextStyle.urbanistBold.copyWith(fontSize: 20.sp)),
+            child: Text("Bosh sahifa", style: AppTextStyle.urbanistBold.copyWith(fontSize: 18.sp)),
           ),
           BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
             if (state.formStatus == FormStatus.authenticated) {
@@ -87,11 +88,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   (state.userInfoModel.photo.isEmpty)
                       ? Icon(Icons.account_circle_rounded, size: 34.sp)
                       : ClipRRect(
-                    borderRadius: BorderRadius.circular(80),
+                    borderRadius: BorderRadius.circular(400.r),
                     child: Image.network(
                       state.userInfoModel.photo,
-                      width: 50.w,
-                      height: 50.h,
+                      width: 50.sp,
+                      height: 50.sp,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -111,13 +112,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   )
                 ]),
               );
-            } else if (state.formStatus == FormStatus.loading) {
+            }
+              if (state.formStatus == FormStatus.loading) {
               return Center(child: CircularProgressIndicator());
             }
             return Center(child: Text(state.errorText));
           }),
+          SizedBox(height: 7.h),
           SizedBox(
-            height:36.h,
+            height:38.h,
             child: ListView(
               padding: EdgeInsets.symmetric(horizontal: 17.w),
               scrollDirection: Axis.horizontal,
@@ -132,119 +135,106 @@ class _HomeScreenState extends State<HomeScreen> {
                     margin: EdgeInsets.symmetric(horizontal:3.w),
                     padding: EdgeInsets.symmetric(horizontal: 8.w,vertical: 8.h),
                     decoration: BoxDecoration(
-                      color: AppColors.white,
+                      color: (activeID==index)?AppColors.c257CFF:AppColors.white,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Center(
-                      child: Column(
-                        children: [
-                          Text(category[index],
-                              style: AppTextStyle.urbanistBold.copyWith(fontSize: 14.sp)),
-                        ],
-                      ),
+                      child: Text(category[index],
+                          style: AppTextStyle.urbanistBold.copyWith(fontSize: 12.sp,color:(activeID==index)?AppColors.white:AppColors.black)),
                     ),
                   ),
                 );
               }),
             ),
           ),
-          // SizedBox(height: 16.h,),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(height: 20.h,),
-                  BlocBuilder<TestBloc, TestState>(builder: (context, state2) {
-                    if (state2.statusMessage == "test olindi") {
-                      List<TestModel> allTests =state2.testModel;
-                      int totalPages = (allTests.length / itemsPerPage).ceil();
-                      List<TestModel> paginatedList = allTests
-                          .skip((currentPage - 1) * itemsPerPage)
-                          .take(itemsPerPage)
-                          .toList();
+          SizedBox(height: 16.h,),
+          BlocBuilder<TestBloc, TestState>(builder: (context, state2) {
+            if (state2.statusMessage == "test olindi") {
+              List<TestModel> allTests =state2.testModel;
+              int totalPages = (allTests.length / itemsPerPage).ceil();
+              List<TestModel> paginatedList = allTests
+                  .skip((currentPage - 1) * itemsPerPage)
+                  .take(itemsPerPage)
+                  .toList();
 
-                      return (state2.testModel.isNotEmpty)
-                          ? SizedBox(
-                        height: 500.h,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: GridView.count(
-                                padding: EdgeInsets.symmetric(horizontal: 10.w),
-                                scrollDirection: Axis.horizontal,
-                                crossAxisCount: 2,
-                                shrinkWrap: true,
-                                childAspectRatio: 1.2,
-                                children: List.generate(paginatedList.length, (index) {
-                                  final test = paginatedList[index];
-                                  return Container(
-                                    margin: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16.r),
-                                      color: AppColors.white,
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        (test.image.isEmpty)
-                                            ? Image.network(
-                                          "https://pmtests.uz/static/media/logo.4498d5b43416f763567c.jpg",
-                                          width: 100.w,
-                                          height: 100.h,
-                                        )
-                                            : ClipRRect(
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(16.r),
-                                                topRight: Radius.circular(16.r)),
-                                            child: Image.network(
-                                              test.image,
-                                              fit: BoxFit.cover,
-                                              height: 100.h,
-                                              width: double.infinity,
-                                            )),
-                                        SizedBox(height: 10.h),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: 16.w),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+              return (state2.testModel.isNotEmpty)
+                  ? Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          GridView.count(
+                          physics: NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.symmetric(horizontal: 10.w),
+                            // scrollDirection: Axis,
+                            crossAxisCount: 2,
+                            shrinkWrap: true,
+                            childAspectRatio: 0.70,
+                            children:[
+                              ...List.generate(paginatedList.length, (index) {
+                                final test = paginatedList[index];
+                                return Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16.r),
+                                    color: AppColors.white,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      (test.image.isEmpty)
+                                          ? Image.network("https://pmtests.uz/static/media/logo.4498d5b43416f763567c.jpg", width: 80.w, height: 80.h,)
+                                          : ClipRRect(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(16.r),
+                                              topRight: Radius.circular(16.r)),
+                                          child: Image.network(
+                                            test.image,
+                                            fit: BoxFit.cover,
+                                            height: 80.h,
+                                            width: double.infinity,
+                                          )),
+                                      SizedBox(height: 10.h),
+                                      Padding(padding: EdgeInsets.symmetric(horizontal: 16.w), child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(test.title,
+                                              style: AppTextStyle.urbanistSemiBold.copyWith(fontSize: 10.sp)),
+                                          SizedBox(height: 5.h),
+                                          Row(
                                             children: [
-                                              Text(test.title,
-                                                  style: AppTextStyle.urbanistSemiBold.copyWith(fontSize: 11.sp)),
-                                              SizedBox(height: 5.h),
-                                              Row(
+                                              Column(
                                                 children: [
-                                                  Column(
-                                                    children: [
-                                                      if (test.discountPrice.isNotEmpty)
-                                                        Text("${test.discountPrice} so'm",
-                                                            style: AppTextStyle.urbanistRegular.copyWith(
-                                                                overflow: TextOverflow.visible,
-                                                                color: Colors.red,
-                                                                fontSize: 10.sp,
-                                                                decoration: TextDecoration.lineThrough,
-                                                                decorationColor: Colors.red)),
-                                                      Text("${test.price} so'm",
-                                                          style: AppTextStyle.urbanistRegular.copyWith(
-                                                              fontSize: 10.sp, color: AppColors.c257CFF)),
-                                                    ],
-                                                  ),
-                                                  Spacer(),
-                                                  Icon(Icons.watch_later_outlined, size: 10.sp),
-                                                  SizedBox(width: 2.w),
-                                                  Text("${test.duration} min",
-                                                      style: AppTextStyle.urbanistRegular.copyWith(fontSize: 10.sp))
+                                                  if (test.discountPrice.isNotEmpty)
+                                                    Text("${test.discountPrice} so'm",
+                                                        style: AppTextStyle.urbanistRegular.copyWith(
+                                                            overflow: TextOverflow.visible,
+                                                            color: Colors.red,
+                                                            fontSize: 10.sp,
+                                                            decoration: TextDecoration.lineThrough,
+                                                            decorationColor: Colors.red)),
+                                                  Text("${test.price} so'm",
+                                                      style: AppTextStyle.urbanistRegular.copyWith(
+                                                          fontSize: 10.sp, color: AppColors.c257CFF)),
                                                 ],
                                               ),
+                                              Spacer(),
+                                              Icon(Icons.watch_later_outlined, size: 10.sp),
+                                              SizedBox(width: 2.w),
+                                              Text("${test.duration} min",
+                                                  style: AppTextStyle.urbanistRegular.copyWith(fontSize: 10.sp))
                                             ],
                                           ),
-                                        ),
-                                        Spacer(),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 0.h),
-                                          child: Row(
-                                            children: [
-                                              Text("${test.questionCount} ta savol"),
-                                              Spacer(),
+                                        ],
+                                      ),
+                                      ),
+                                      Spacer(),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 16.w,right: 7.w,bottom: 4.h),
+                                        child: Row(
+                                          children: [
+                                            Text("${test.questionCount} ta savol",style: AppTextStyle.urbanistRegular.copyWith(fontSize: 10.sp),),
+                                            Spacer(),
                                             (test.isFree)?((test.userTestModel.id!=0)?
                                             TextButton(onPressed:(){
                                               context.read<TestBloc>().add(ResultAllEvent(token: StorageRepository.getString(key: "access"),id:test.userTestModel.id!));
@@ -254,54 +244,55 @@ class _HomeScreenState extends State<HomeScreen> {
                                               debugPrint("AAAAAA${test.userTestModel.id}");
                                             },
                                                 style: TextButton.styleFrom(
+                                                    padding: EdgeInsets.symmetric(horizontal:6.w,),
+                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
                                                     backgroundColor: AppColors.c257CFF.withOpacity(0.2)),
                                                 child:Text("Yechimni ko'rish", style: AppTextStyle.urbanistRegular.copyWith(
-                                                    fontSize: 10.sp, color: AppColors.c257CFF))):
+                                                    fontSize: 8.sp, color: AppColors.c257CFF))):
                                             TextButton(
-                                                onPressed: () {
-                                                  context.read<TestBloc>().add(QuestionAllEvent(token: StorageRepository.getString(key: "success"), id:test.id));
-                                                  Navigator.push(context,MaterialPageRoute(builder: (context){
-                                                    return QuestionScreen(subjectModel:test,);
-                                                  }));
-                                                },
+                                              onPressed: () {
+                                                context.read<TestBloc>().add(QuestionAllEvent(token: StorageRepository.getString(key: "success"), id:test.id));
+                                                Navigator.push(context,MaterialPageRoute(builder: (context){
+                                                  return QuestionScreen(subjectModel:test,);
+                                                }));
+                                              },
+                                              style: TextButton.styleFrom(
+                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                                                  backgroundColor: AppColors.c257CFF.withOpacity(0.2)),
+                                              child: Text("Testni Yechish",
+                                                  style: AppTextStyle.urbanistRegular.copyWith(
+                                                      fontSize: 10.sp, color: AppColors.c257CFF)),
+                                            )):TextButton(onPressed: (){},
                                                 style: TextButton.styleFrom(
-                                                    backgroundColor: AppColors.c257CFF.withOpacity(0.2)),
-                                                child: Text("Testni Yechish",
-                                                    style: AppTextStyle.urbanistRegular.copyWith(
-                                                        fontSize: 10.sp, color: AppColors.c257CFF)),
-                                              )):TextButton(onPressed: (){},
-                                                style: TextButton.styleFrom(
+                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
                                                     backgroundColor: AppColors.c257CFF.withOpacity(0.2)),
                                                 child:Text("Sotib olish",
-                                                style: AppTextStyle.urbanistRegular.copyWith(
-                                                    fontSize: 10.sp, color: AppColors.c257CFF)))
-                                            ],
-                                          ),
+                                                    style: AppTextStyle.urbanistRegular.copyWith(
+                                                        fontSize: 10.sp, color: AppColors.c257CFF)))
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  );
-                                }),
-                              ),
-                            ),
-                            SizedBox(height: 10.h),
-                            buildPagination(totalPages),
-                          ],
-                        ),
-                      )
-                          : Center(child: Text("NO DATA"));
-                    }
-                    if(state2.formStatus == FormStatus.loading) {
-                    return Center(child: CircularProgressIndicator());
-                    }
-                    return Center(
-                        child: Text("EEEEEEE${state2.errorText} ${state2.testModel.length}"));
-                  }),
-                  SizedBox(height: 50.h),
-                ],
-              ),
-            ),
-          ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
+                            ],),
+                          SizedBox(height: 10.h),
+                          buildPagination(totalPages),
+                          SizedBox(height: 50.h,)
+                        ],
+                      ),
+                    ),
+                  )
+                  : Center(child: Text("NO DATA"));
+            }
+            if(state2.formStatus == FormStatus.loading) {
+            return Center(child: CircularProgressIndicator());
+            }
+            return Center(
+                child:LottieBuilder.asset(AppImages.empty));
+          }),
+          // SizedBox(height: 50.h),
         ],
       ),
     );

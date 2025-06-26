@@ -7,7 +7,7 @@ import 'package:quiz/data/model/networ_respons_model/network_response.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../data/model/user_info/user_info_screen.dart';
+import '../../data/model/user_info/user_info_model.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({required AuthRepository appRepository})
