@@ -38,7 +38,7 @@ class AuthRepository {
   //     await ApiProvider.verifyOtpCode(phoneNumber: phoneNumber, code: password);
 
   Future<NetworkResponse> updatePassword(
-      {required String newPassword, required String token}) async =>
+      {required String newPassword, required String phone}) async =>
       await ApiProvider.updateUserPassword(
-          newPassword: newPassword, token: token);
+          newPassword: newPassword,phone:phone);
 }

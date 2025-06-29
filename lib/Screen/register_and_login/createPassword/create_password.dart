@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quiz/Screen/home/home_screen.dart';
+import 'package:quiz/Screen/register_and_login/sign_in/sign_in_screen.dart';
 import 'package:quiz/Screen/tabbox/tab_box_screen.dart';
 import 'package:quiz/data/local/local.dart';
 import 'package:quiz/data/model/user_model/user_model.dart';
@@ -18,8 +19,8 @@ import '../widget/my_text_from.dart';
 
 
 class CreatePasswordScreen extends StatefulWidget {
-  const CreatePasswordScreen({super.key, required this.userModel});
-
+  const CreatePasswordScreen({super.key, required this.userModel,required this.isForget});
+  final bool isForget;
   final UserModel userModel;
   @override
   State<CreatePasswordScreen> createState() => _CreatePasswordScreenState();
@@ -104,7 +105,7 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                       SnackBar(
                         backgroundColor: Colors.red,
                         content: Text(
-                          "Password and Confirm password are not the same",
+                          "Parollar mos emas",
                           style: TextStyle(
                             color: AppColors.white,
                             fontSize: 20.sp,
@@ -119,7 +120,9 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                         password:password1Controller.text,
                         showPassword: password2Controller.text
                     );
-                    context.read<AuthBloc>().add(
+                    debugPrint("Aadfs${widget.isForget}");
+                    (widget.isForget)?context.read<AuthBloc>().add(AuthUpdatePasswordEvent(newPassword:password2Controller.text,phone: widget.userModel.phone)):
+                context.read<AuthBloc>().add(
                       RegisterUserEvent(userModel: userModel),
                     );
                   }
@@ -143,20 +146,24 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                   style: TextButton.styleFrom(
                     backgroundColor: AppColors.c257CFF,
                   ),
-                  child:Text("TASDQILASH",style: AppTextStyle.urbanistSemiBold.copyWith(color: AppColors.white),)),
+                  child:Text("TASDIQLASH",style: AppTextStyle.urbanistSemiBold.copyWith(color: AppColors.white),)),
             )
           ],),
         );
       }, listener:(BuildContext context, AuthState state) {
         if (state.statusMessage == "this_number_already_registered") {}
-        if (state.statusMessage == "registered") {
-          StorageRepository.setString(key: "key", value:state.userModel.accessToken);
+        if (state.statusMessage == "registered"){
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => TabScreen()
             ),
           );
+        }
+        if(state.statusMessage=="Updated"){
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+            return SignInScreen();
+          }));
         }
       }
     ),

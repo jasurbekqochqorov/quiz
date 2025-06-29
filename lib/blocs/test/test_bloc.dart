@@ -59,8 +59,9 @@ class TestBloc extends Bloc<TestEvent,TestState> {
 
   Future<void> _getAllQuestion(QuestionAllEvent event, Emitter<TestState> emit) async {
     emit(state.copyWith(formStatus: FormStatus.loading));
+    debugPrint("Bu yerga keldi1");
     try {
-      final response = await _testRepository.getQuestion(token: event.token,id: event.id);
+      final response = await _testRepository.getQuestion(token: event.token,id: event.id,isSold: event.isSold);
       if (response.errorText=='not') {
         emit(state.copyWith(
             questions: response.data as QuestionMainModel,

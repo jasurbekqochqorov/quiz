@@ -2,19 +2,13 @@
 class AppImages {
   //.png
 
-  static const String book = "assets/images/book.png";
-  static const String book2 = "assets/images/book2.png";
-  static const String books = "assets/images/books.png";
-  static const String img = "assets/images/app_icon.png";
-  static const String splash = "assets/images/splash.png";
-  static const String doctor = "assets/images/doctor.png";
-  static const String uzb = "assets/icons/uzb.svg";
+  static const String instagram = "assets/images/instagram.png";
+  static const String youtube = "assets/images/youtube.png";
   static const String call = "assets/icons/call.svg";
-  static const String boy = "assets/images/boy.png";
-  static const String girl = "assets/images/girl.png";
-  static const String phone  = "assets/images/phone.png";
   static const String callPng  = "assets/images/call.png";
   static const String dennic  = "assets/images/dennic.png";
+  static const String logo1 = "assets/images/logo.png";
+
   static const String creator  = "assets/images/creator.JPG";
   static const String cansel  = "assets/icons/cansel.svg";
   static const String calendar  = "assets/icons/calendar.svg";

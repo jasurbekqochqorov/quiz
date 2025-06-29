@@ -58,11 +58,13 @@ class _BalanceHistoryScreenState extends State<BalanceHistoryScreen> {
               children: [
               Text("${index+1}",style:AppTextStyle.urbanistSemiBold.copyWith(fontSize: 14.sp),),
               SizedBox(width: 8.w,),
-              Text("+${(widget.balance[index].amount)}",style: AppTextStyle.urbanistMedium.copyWith(fontSize: 12.sp,color: Colors.green),),
+                (widget.balance[index].test=="Hisob to'ldirildi")?Text("+${(widget.balance[index].amount)}",style: AppTextStyle.urbanistMedium.copyWith(fontSize: 12.sp,color: Colors.green),):Text(widget.balance[index].amount,style: AppTextStyle.urbanistMedium.copyWith(color:Colors.red,fontSize: 12.sp),),
                 Spacer(),
                 Text(widget.balance[index].payTime),
               SizedBox(width: 5.w,),
-              Text(widget.balance[index].test),
+              SizedBox(
+                  width: 95.w,
+                  child: Text(widget.balance[index].test)),
               SizedBox(width: 5.w,),
             ],),
           );

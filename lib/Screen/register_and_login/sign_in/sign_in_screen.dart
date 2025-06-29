@@ -11,10 +11,8 @@ import 'package:quiz/utils/styles/app_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../home/home_screen.dart';
 import '../../tabbox/tab_box_screen.dart';
 import '../forgot_password/forget_password.dart';
-import '../forgot_password/new_pasword.dart';
 import '../sign_up/sign_up_screen.dart';
 import '../widget/my_text_from.dart';
 import '../widget/my_text_from_tel.dart';
@@ -215,7 +213,6 @@ class _SignInScreenState extends State<SignInScreen> {
             );
           }
           if (state.statusMessage=="logged" && state.formStatus==FormStatus.authenticated) {
-            StorageRepository.setString(key: "key", value:state.userModel.accessToken);
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
                   return TabScreen();
                 },

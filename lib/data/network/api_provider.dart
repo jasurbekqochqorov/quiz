@@ -87,6 +87,8 @@ class ApiProvider {
         body: jsonEncode(userModel.toJson()),
       );
       if (response.statusCode == 200) {
+        String token=jsonDecode(response.body)["token"];
+        StorageRepository.setString(key: 'access', value: token);
         networkResponse.data = "Registered";
       } else if (response.statusCode == 400) {
         debugPrint(
@@ -197,7 +199,6 @@ class ApiProvider {
   }
   static Future<NetworkResponse> forgetPassword({required String phoneNumber}) async {
     NetworkResponse networkResponse = NetworkResponse();
-
     try {
       Uri uri = Uri.parse("https://swag.dennic.uz/v1/customer/forget-password");
 
@@ -219,20 +220,27 @@ class ApiProvider {
 
     return networkResponse;
   }
-  static Future<NetworkResponse> updateUserPassword({required String newPassword, required String token}) async {
+  static Future<NetworkResponse> updateUserPassword({required String newPassword, required String phone}) async {
     NetworkResponse networkResponse = NetworkResponse();
+    debugPrint("ASDAfasaFA${phone}${newPassword}");
     try {
       Uri uri = Uri.parse(
-          "http://dennic.uz:9050/v1/customer/update-password?NewPassword=$newPassword");
-      http.Response response = await http.put(
+          "https://pmtests.uz/v1/users/update-user-password/");
+      http.Response response = await http.patch(
         uri,
         headers: {
-          "Authorization": token,
+          "Authorization": StorageRepository.getString(key: "access"),
           "Content-Type": "application/json",
         },
+        body: """{
+        "phone":"$phone",
+        "password":"$newPassword",
+        "show_password":"$newPassword"
+        }"""
       );
+      debugPrint("Adsfads23${response.body} ${response.statusCode}");
       if (response.statusCode == 200) {
-        networkResponse.data = jsonDecode(response.body);
+        networkResponse.errorText="not";
       } else {
         networkResponse.errorText = response.statusCode.toString();
       }
@@ -270,9 +278,9 @@ class ApiProvider {
       );
     }
   }
-  static Future<NetworkResponse> getQuestion({required String token,required int id}) async {
+  static Future<NetworkResponse> getQuestion({required String token,required int id,required bool isSold}) async {
     try {
-      Uri uri = Uri.parse("https://pmtests.uz/v1/tests/free-tests/$id/");
+      Uri uri = (isSold)?Uri.parse("https://pmtests.uz/v1/tests/user-tests/$id/"):Uri.parse("https://pmtests.uz/v1/tests/free-tests/$id/");
       http.Response response = await http.get(
         uri,headers:{
           "Authorization": "Bearer ${StorageRepository.getString(key: "access")}",
@@ -328,6 +336,7 @@ class ApiProvider {
 
   static Future<NetworkResponse> postResult({required List<Map<String,dynamic>> answers,required int id}) async {
     try {
+      debugPrint("AAAAAAAAAAAAAAAAAAAAAA${answers}");
       Uri uri = Uri.parse("https://pmtests.uz/v1/tests/check-user-test/$id/");
       http.Response response = await http.post(
         uri,headers:{
@@ -372,6 +381,36 @@ class ApiProvider {
         return NetworkResponse(
          errorText:"not",
           data:"${jsonDecode(response.body)["click"]}"
+        );
+      } else {
+        return NetworkResponse(
+          errorText: "Server xatosi: ${response.statusCode}",
+        );
+      }
+    } catch (e) {
+      return NetworkResponse(
+        errorText: "Tarmoq xatosi: $e",
+      );
+    }
+  }
+
+  static Future<NetworkResponse> payPayment({required int id}) async {
+    try {
+      Uri uri = Uri.parse("https://pmtests.uz/v1/users/purchase-test/");
+      http.Response response = await http.post(
+        uri,headers:{
+          "Authorization": "Bearer ${StorageRepository.getString(key: "access")}",
+          "Content-Type": "application/json",
+      },
+        body:"""
+        {
+        "test":$id
+        }
+        """
+      );
+        if (response.statusCode == 200 || response.statusCode == 201){
+        return NetworkResponse(
+         errorText:"not",
         );
       } else {
         return NetworkResponse(

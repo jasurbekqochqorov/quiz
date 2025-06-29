@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quiz/Screen/Question/StartQuestion/widget/bottom_container.dart';
+import 'package:quiz/Screen/tabbox/tab_box_screen.dart';
+import 'package:quiz/blocs/auth/auth_bloc.dart';
+import 'package:quiz/blocs/auth/auth_state.dart';
 import 'package:quiz/blocs/test/test_bloc.dart';
 import 'package:quiz/blocs/test/test_state.dart';
 import 'package:quiz/data/model/test_model/test_model.dart';
+import '../../../blocs/auth/auth_event.dart';
 import '../../../blocs/test/test_event.dart';
 import '../../../utils/colors/app_colors.dart';
 import '../../../utils/styles/app_text_style.dart';
@@ -27,8 +31,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
       appBar: AppBar(
         leading: IconButton(onPressed: (){
           context.read<TestBloc>().add(TestAllEvent(subjectId: 0));
+          context.read<AuthBloc>().add(InfoUserEvent());
           Navigator.pushReplacement(context,MaterialPageRoute(builder: (context){
-            return ResultScreen();
+            return TabScreen();
           }));
         }, icon: Icon(Icons.arrow_back)),
         title: Text("Test haqida ma'lumot",style: AppTextStyle.urbanistBold.copyWith(fontSize: 20.sp)),
@@ -41,7 +46,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
               Expanded(
                 child: Stack(
                   children: [
-                    Container(width: double.infinity,
+                    Container(width: double.infinity,height: double.infinity,
                         padding:
                         EdgeInsets.only(left: 32.w, right: 32.w, top: 32.h,bottom: 100.h),
                         decoration: BoxDecoration(
@@ -52,9 +57,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
                         child: SingleChildScrollView(
                           physics:const BouncingScrollPhysics(),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Image.network(widget.subjectModel.image,width: 250.w,height:250.h,),
+                              (widget.subjectModel.image.isEmpty)?Image.network("https://pmtests.uz/static/media/logo.4498d5b43416f763567c.jpg", width: 150.w, height: 150.h,):Image.network(widget.subjectModel.image,width: 250.w,height:250.h,),
                               SizedBox(
                                 height: 15.h,
                               ),
@@ -97,12 +102,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
                               SizedBox(
                                 height: 12.h,
                               ),
-                              Text(
-                                'Yo\'riqnoma :',
-                                style: AppTextStyle.urbanistBold.copyWith(
-                                    color: AppColors.black, fontSize: 16.sp),
-                              ),
-                              SizedBox(height: 100.h,),
                             ],
                           ),
                         )),
@@ -120,7 +119,10 @@ class _QuestionScreenState extends State<QuestionScreen> {
             ],
           );
         }
-        return Center(child: CircularProgressIndicator(),);
+        if(state.formStatus==FormStatus.loading){
+          return Center(child: CircularProgressIndicator(),);
+        }
+        return Center(child: Text(state.errorText),);
       },),
     );
   }

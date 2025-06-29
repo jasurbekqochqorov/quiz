@@ -15,9 +15,10 @@ class TestAllEvent extends TestEvent {
 
 
 class QuestionAllEvent extends TestEvent {
-  QuestionAllEvent({required this.token,required this.id});
+  QuestionAllEvent({required this.token,required this.id,required this.isSold});
   final String token;
   final int id;
+  final bool isSold;
 
   @override
   List<Object?> get props => [token,id];

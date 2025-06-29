@@ -9,8 +9,8 @@ class TestRepository {
   Future<NetworkResponse> getRating() async {
     return await ApiProvider.getRating();
   }
-  Future<NetworkResponse> getQuestion({required String token,required int id}) async {
-    return await ApiProvider.getQuestion(token: token,id: id);
+  Future<NetworkResponse> getQuestion({required String token,required int id,required bool isSold}) async {
+    return await ApiProvider.getQuestion(token: token,id: id,isSold: isSold);
   }
   Future<NetworkResponse> getResult({required String token,required int id}) async {
     return await ApiProvider.getResult(token: token,id: id);
@@ -23,5 +23,9 @@ class TestRepository {
 
   Future<NetworkResponse> postPayment({required int summa}) async {
     return await ApiProvider.postPayment(summa: summa);
+  }
+
+  Future<NetworkResponse> payPayment({required int id}) async {
+    return await ApiProvider.payPayment(id:id);
   }
 }

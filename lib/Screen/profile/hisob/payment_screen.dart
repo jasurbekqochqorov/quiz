@@ -13,6 +13,7 @@ import 'package:quiz/utils/styles/app_text_style.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../utils/colors/app_colors.dart';
+import '../../../utils/extention/extantions.dart';
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({super.key,required this.userInfoModel});
@@ -118,8 +119,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               return Center(child: Text(""),);
             }, listener:(BuildContext context,PaymentState state){
               if(state.formStatus==FormStatus.success){
-                debugPrint("AAAAAAAAAAAAAAAAAA2${state.statusMessage}");
-                _launchURL(url: state.statusMessage);
+                launchURL1(url: state.statusMessage);
               }
             })
           ],
@@ -127,14 +127,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ),
     );
   }
-  Future<void> _launchURL({required String url}) async {
-    final Uri uri = Uri.parse("$url");
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      throw 'URL ochib bo‘lmadi: $url';
-    }
-  }
+
   @override
   void dispose() {
     focusNode.dispose();

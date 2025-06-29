@@ -12,3 +12,11 @@ class PostPaymentEvent extends PaymentEvent {
   @override
   List<Object?> get props => [summa];
 }
+
+class PayPaymentEvent extends PaymentEvent {
+  PayPaymentEvent({required this.id});
+  final int id;
+
+  @override
+  List<Object?> get props => [id];
+}

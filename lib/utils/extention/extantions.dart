@@ -1,3 +1,5 @@
+import 'package:url_launcher/url_launcher.dart';
+
 extension ForString on String {
   bool isDigitMy() {
     for (int i = 0; i < length; i++) {
@@ -31,4 +33,13 @@ String decodeHtml(String html) {
       .replaceAll('&#39;', "'")
       .replaceAll('&rsquo;', '’')
       .replaceAll('&diams;', '♦');
+}
+
+Future<void> launchURL1({required String url}) async {
+  final Uri uri = Uri.parse("$url");
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  } else {
+    throw 'URL ochib bo‘lmadi: $url';
+  }
 }

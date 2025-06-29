@@ -14,8 +14,8 @@ import '../../../blocs/auth/auth_bloc.dart';
 import '../sign_in/sign_in_screen.dart';
 
 class ForgotVerifyCodeScreen extends StatefulWidget {
-  const ForgotVerifyCodeScreen(this.userModel,{super.key, required this.phone});
-
+  const ForgotVerifyCodeScreen(this.userModel,{super.key, required this.phone,required this.isForget});
+  final bool isForget;
   final String phone;
   final UserModel userModel;
 
@@ -308,8 +308,12 @@ class _ForgotVerifyCodeScreenState extends State<ForgotVerifyCodeScreen>
         },
         listener: (BuildContext context, AuthState state) {
           if(state.statusMessage=="code tasdiqlandi"){
+            UserModel userModel=widget.userModel;
+            userModel=userModel.copyWith(
+              phone: widget.phone
+            );
             Navigator.pushReplacement(context,MaterialPageRoute(builder: (context){
-              return CreatePasswordScreen(userModel:widget.userModel);
+              return CreatePasswordScreen(userModel:userModel,isForget: widget.isForget,);
             }));
           }
           else if(state.formStatus==FormStatus.success){

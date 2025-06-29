@@ -20,6 +20,7 @@ class PaymentBloc extends Bloc<PaymentEvent,PaymentState> {
         ) {
 
     on<PostPaymentEvent>(_postPayment);
+    on<PayPaymentEvent>(_payPayment);
   }
 
   final TestRepository _testRepository;
@@ -33,6 +34,27 @@ class PaymentBloc extends Bloc<PaymentEvent,PaymentState> {
         emit(state.copyWith(
             formStatus: FormStatus.success,
             statusMessage:"${response.data}"));
+      } else {
+        emit(state.copyWith(
+          formStatus: FormStatus.error,
+        ));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+        formStatus: FormStatus.error,
+      ));
+    }
+  }
+
+  Future<void> _payPayment(PayPaymentEvent event, Emitter<PaymentState> emit) async {
+    emit(state.copyWith(formStatus: FormStatus.loading));
+    try {
+      final response = await _testRepository.payPayment(id:event.id);
+      if (response.errorText=="not") {
+        debugPrint("SSSSSSSSSS2");
+        emit(state.copyWith(
+            formStatus: FormStatus.pure,
+            statusMessage:"To'landi"));
       } else {
         emit(state.copyWith(
           formStatus: FormStatus.error,

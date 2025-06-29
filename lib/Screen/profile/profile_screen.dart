@@ -29,7 +29,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.1),
+      backgroundColor: Colors.white,
       body:BlocBuilder<AuthBloc,AuthState>(builder: (context,state){
         if(state.formStatus==FormStatus.authenticated){
           return  Padding(
@@ -42,7 +42,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 16.w,vertical: 16.h),
                   decoration: BoxDecoration(
-                      color: AppColors.white
+                      color:Colors.grey.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(16.r)
                   ),
                   child:Row(children: [
                     (state.userInfoModel.photo.isEmpty)?Icon(Icons.account_circle_rounded,size: 34.sp,):ClipRRect(borderRadius: BorderRadius.circular(100),child: Image.network(state.userInfoModel.photo,width: 50.sp,height: 50.sp,fit: BoxFit.cover,),),
@@ -62,7 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Column(
                       children: [
                         ListTile(
-                          tileColor: Colors.white,
+                          tileColor:Colors.grey.withOpacity(0.2),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
                           leading: Icon(Icons.person,size: 22.sp,),
                           splashColor: Colors.blue,
@@ -70,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         SizedBox(height: 10.h,),
                         ListTile(
-                          tileColor: Colors.white,
+                          tileColor: Colors.grey.withOpacity(0.2),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
                           leading: Icon(Icons.person,size: 22.sp),
                           splashColor: Colors.blue,
@@ -78,7 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         SizedBox(height: 10.h,),
                         ListTile(
-                          tileColor: Colors.white,
+                          tileColor: Colors.grey.withOpacity(0.2),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
                           leading: Icon(Icons.phone,size: 22.sp),
                           splashColor: Colors.blue,
@@ -86,7 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         SizedBox(height: 10.h,),
                         ListTile(
-                          tileColor: Colors.white,
+                          tileColor: Colors.grey.withOpacity(0.2),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
                           leading: Icon(Icons.key,size: 22.sp),
                           splashColor: Colors.blue,
@@ -94,7 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         SizedBox(height: 10.h,),
                         ListTile(
-                          tileColor: Colors.white,
+                          tileColor: Colors.grey.withOpacity(0.2),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
                           leading: Icon(Icons.account_balance,size: 22.sp),
                           splashColor: Colors.blue,
@@ -107,16 +108,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               return PaymentScreen(userInfoModel: state.userInfoModel,);
                             }));
                           },
-                          tileColor: Colors.white,
+                          tileColor: Colors.blue.withOpacity(0.7),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
-                          splashColor: Colors.blue,
+                          splashColor: Colors.white,
                           title:Text("Hisobni to'ldirish",style: AppTextStyle.urbanistSemiBold,),
                         ),
                         SizedBox(height: 10.h,),
                         ListTile(
-                          tileColor: Colors.white,
+                          tileColor: Colors.blue.withOpacity(0.7),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
-                          splashColor: Colors.blue,
+                          splashColor: Colors.white,
                           onTap:() {
                             Navigator.push(context, MaterialPageRoute(builder: (context){
                               return BalanceHistoryScreen(balance:state.userInfoModel.balances,);
@@ -124,10 +125,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           },
                           title: Text("Hisob tarixim",style: AppTextStyle.urbanistSemiBold,),
                         ),
+                        SizedBox(height: 10.h,),
                         ListTile(
-                          tileColor: Colors.white,
+                          tileColor: Colors.blue.withOpacity(0.7),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
-                          splashColor: Colors.blue,
+                          splashColor: Colors.white,
                           onTap:() {
                             Navigator.push(context, MaterialPageRoute(builder: (context){
                               return MyTestScreen(userTestResultModel:state.userInfoModel.userTest,);
@@ -137,11 +139,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         SizedBox(height: 10.h,),
                         ListTile(
-                          tileColor: Colors.white,
+                          tileColor:Colors.grey.withOpacity(0.2),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
                           leading: Icon(Icons.logout,color: Colors.red,size: 22.sp),
-                          splashColor: Colors.blue,
+                          splashColor: Colors.blue.withOpacity(0.7),
                           onTap:() {
+                            StorageRepository.setString(key: "access", value: "");
                             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
                               return SignInScreen();
                             }));

@@ -172,7 +172,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         controllerFamilyName.text.isNotEmpty && phoneController.text.isNotEmpty){
                       context.read<AuthBloc>().add(SendSmsEvent(phone: "998${phoneController.text}"));
                       Navigator.push(context,MaterialPageRoute(builder: (context){
-                        return ForgotVerifyCodeScreen(userModel,phone: "998${phoneController.text}",);
+                        return ForgotVerifyCodeScreen(userModel,phone: "998${phoneController.text}",isForget: false,);
                       }));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(

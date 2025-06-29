@@ -25,7 +25,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LoginUserEvent>(_loginUser);
     on<RegisterUserEvent>(_registerUser);
     on<SendSmsEvent>(_sendSmsCode);
-    on<LogOutUserEvent>(_logOutUser);
     on<AuthForgetPasswordEvent>(_forgetPassword);
     on<AuthUpdatePasswordEvent>(_updatePassword);
     on<AuthVerifyOtpCoderEvent>(_checkSmsCode);
@@ -164,26 +163,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
 
-  Future<void> _logOutUser(LogOutUserEvent event, emit) async {
-    NetworkResponse networkResponse = NetworkResponse();
 
-    networkResponse = await _appRepository.logoutUser(token: "");
-  }
 
   Future<void> _updatePassword(AuthUpdatePasswordEvent event, emit) async {
     NetworkResponse networkResponse = NetworkResponse();
     emit(state.copyWith(formStatus: FormStatus.loading));
-
-    if (state.userToken.isNotEmpty) {
       networkResponse = await _appRepository.updatePassword(
         newPassword: event.newPassword,
-        token: state.userToken,
-      );
-
-      if (networkResponse.errorText.isEmpty) {
+        phone: event.phone);
+      if (networkResponse.errorText=="not") {
         emit(
           state.copyWith(
             formStatus: FormStatus.success,
+            statusMessage: "Updated"
           ),
         );
       } else {
@@ -195,6 +187,5 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           ),
         );
       }
-    }
   }
 }

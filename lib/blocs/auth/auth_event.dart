@@ -85,11 +85,11 @@ class AuthForgetPasswordEvent extends AuthEvent {
 
 class AuthUpdatePasswordEvent extends AuthEvent {
   final String newPassword;
-
-  AuthUpdatePasswordEvent({required this.newPassword});
+  final String phone;
+  AuthUpdatePasswordEvent({required this.newPassword,required this.phone});
 
   @override
-  List<Object?> get props => [newPassword];
+  List<Object?> get props => [newPassword,phone];
 }
 
 class SendSmsEvent extends AuthEvent {

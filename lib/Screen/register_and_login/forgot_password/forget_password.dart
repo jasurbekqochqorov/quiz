@@ -1,7 +1,6 @@
 import 'package:quiz/blocs/auth/auth_bloc.dart';
 import 'package:quiz/blocs/auth/auth_event.dart';
 import 'package:quiz/blocs/auth/auth_state.dart';
-import 'package:quiz/data/model/user_model/user_model.dart';
 import 'package:quiz/utils/size/size_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -76,7 +75,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     onPressed:() {
                       context.read<AuthBloc>().add(SendSmsEvent(phone: "998${controllerPhoneNumber.text}"));
                             Navigator.pushReplacement(context,MaterialPageRoute(builder: (context){
-                              return ForgotVerifyCodeScreen(state.userModel,phone: "998${controllerPhoneNumber.text}",);
+                              return ForgotVerifyCodeScreen(state.userModel,phone: "998${controllerPhoneNumber.text}",isForget: true,);
                             }));
                           },
                     child: state.formStatus == FormStatus.loading

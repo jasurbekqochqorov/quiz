@@ -130,6 +130,8 @@ class _QuizScreenState extends State<QuizScreen> {
                     selectTo.add(ans);
                   }
                 }
+                debugPrint("$selectTo");
+                await Future.delayed(Duration(seconds: 5));
                 context.read<TestBloc>().add(PostResultAllEvent(answers:selectTo, id:widget.questionModel.id));
                 _navigateToResultScreen();
               },
@@ -221,16 +223,16 @@ class _QuizScreenState extends State<QuizScreen> {
                     ),
                     ButtonDown(
                       onPrevious: () {
-                        debugPrint("ASD--${selectedAnswer}");
                         activeIndex--;
                         activeVariant = selectedAnswer[activeIndex]!;
                         setState(() {});
+                        debugPrint("ASD--${selectedAnswer}");
                       },
                       onNext: () {
-                        debugPrint("ASD++${selectedAnswer}");
                         selectedAnswer[activeIndex] = activeVariant;
                         activeIndex++;
                         activeVariant = selectedAnswer[activeIndex]!;
+                        debugPrint("ASD++${selectedAnswer}");
                         setState(() {});
                       },
                       questionModel: widget.questionModel.questions,

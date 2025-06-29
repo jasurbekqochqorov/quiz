@@ -70,7 +70,7 @@ class _ResultScreenState extends State<ResultScreen>{
                                     color: AppColors.black,fontSize: 20.sp
                                 ),),
                                 SizedBox(height: 12.h,),
-                                Text(decodeHtml(parseHtml(state.resultMainModel.question[index].text)),
+                                Text(decodeHtml(parseHtml(state.resultMainModel.question[index].text).replaceAll('&gt;', '>').replaceAll('&middot;', '·')),
                                   style: AppTextStyle.urbanistSemiBold.copyWith(
                                     color: AppColors.black,fontSize: 17.sp,
                                   ),),

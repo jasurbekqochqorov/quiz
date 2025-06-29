@@ -55,11 +55,11 @@ class _MyTestScreenState extends State<MyTestScreen> {
             child:Row(children: [
               Text("${index+1}",style:AppTextStyle.urbanistSemiBold,),
               SizedBox(width: 8.w,),
-              Expanded(child: Text(widget.userTestResultModel[index].title,style: AppTextStyle.urbanistMedium.copyWith(fontSize: 12.sp),)),
+              SizedBox(
+                  width: 90.w,
+                  child: Text(widget.userTestResultModel[index].title,style: AppTextStyle.urbanistMedium.copyWith(fontSize: 12.sp),)),
               Spacer(),
               Text(widget.userTestResultModel[index].testTime),
-              SizedBox(width: 5.w,),
-              Text(widget.userTestResultModel[index].price),
               SizedBox(width: 5.w,),
               Text((widget.userTestResultModel[index].price.isEmpty)?"Bepul":widget.userTestResultModel[index].price,style: AppTextStyle.urbanistMedium.copyWith(fontSize: 12.sp),),
               SizedBox(width: 5.w,),

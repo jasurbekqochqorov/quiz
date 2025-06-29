@@ -20,7 +20,7 @@ class GlobalAppBar extends StatelessWidget {
         TextButton(
           style: TextButton.styleFrom(
               padding: EdgeInsets.symmetric(
-                  horizontal: 8.w, vertical: 12.h),
+                  horizontal: 2.w, vertical: 6.h),
               backgroundColor: AppColors.white,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.r),

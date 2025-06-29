@@ -17,7 +17,7 @@ class OnboardingScreen extends StatelessWidget {
     height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Colors.blueGrey,
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           SizedBox(height: 50.h,),
@@ -26,8 +26,8 @@ class OnboardingScreen extends StatelessWidget {
             children: [
             ClipRRect(
               borderRadius:BorderRadius.circular(290.sp),
-              child: Image.asset(
-                AppImages.creator,
+              child: Image.network(
+                "https://pmtests.uz/static/media/logo.4498d5b43416f763567c.jpg",
                 width:250.h,
                 height: 250.h,
                 fit: BoxFit.cover,
@@ -40,15 +40,16 @@ class OnboardingScreen extends StatelessWidget {
               left: 24.w,
               right: 24.w,
             ),
-            color: Colors.blueGrey,
+            color: Colors.white,
             child: Column(
               children: [
                 Text(
                   textAlign: TextAlign.center,
-                  "Siz bu ilova orqali o'z bilimningizni oshiring.Agar sizning ilm darajangiz ushbu ilova orqali oshsa biz bundan faqatgina xursand bo'lamiz",
+                  "Ushbu ilova “ASSESSMENT DEVELOPMENT” mas’uliyati cheklangan jamiyatga tegishli bo’lib, asosiy faoliyat prezident maktablari, al-Xorazmiy maktabi va boshqa ixtisoslashtirilgan maktablarga tayyorlanayotgan o’quvchilarni foydali qo’llanma va sifatli testlar bilan ta’minlashga yo’naltirilgan.",
                   style: AppTextStyle.urbanistBold.copyWith(
-                    color: AppColors.white,
-                    fontSize: 20.sp,
+                    color: AppColors.black,
+                    fontSize: 16.sp,
+                    fontStyle: FontStyle.italic,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -74,7 +75,7 @@ class OnboardingScreen extends StatelessWidget {
                     child: Text(
                       "Ro'yxatdan o'tish",
                       style: TextStyle(
-                        color: AppColors.cFFFFFF,
+                        color: AppColors.white,
                         fontSize: 20.sp,
                         fontWeight: FontWeight.w700,
                       ),
@@ -88,7 +89,7 @@ class OnboardingScreen extends StatelessWidget {
                     Text(
                       "Accountingiz Mavjudmi?",
                       style: TextStyle(
-                        color: AppColors.white,
+                        color: AppColors.black,
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w400,
                       ),
@@ -107,7 +108,7 @@ class OnboardingScreen extends StatelessWidget {
                       child: Text(
                         "Kirish",
                         style: TextStyle(
-                          color: AppColors.black,
+                          color: AppColors.c257CFF,
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w700,
                         ),
